@@ -156,25 +156,58 @@ function ManageEvent() {
     onError: (e) => toast.error(e instanceof Error ? e.message : "Could not save."),
   });
 
-  const [ticketForm, setTicketForm] = useState({ name: "", description: "", price: "0", quantity_total: "100" });
+  const emptyTicketForm = {
+    tier_kind: "regular" as TicketTierKind,
+    name: "Regular",
+    description: "",
+    price: "0",
+    quantity_total: "100",
+    sales_starts_at: "",
+    sales_ends_at: "",
+    table_label: "",
+    seats_per_table: "10",
+  };
+  const [ticketForm, setTicketForm] = useState(emptyTicketForm);
+  const isTable = ticketForm.tier_kind === "table";
   const addTicketType = useMutation({
     mutationFn: async () => {
       const { error } = await supabase.from("ticket_types").insert({
         event_id: eventId,
+        tier_kind: ticketForm.tier_kind,
         name: ticketForm.name.trim(),
         description: ticketForm.description.trim() || null,
         price: Number(ticketForm.price) || 0,
         quantity_total: Number(ticketForm.quantity_total) || 0,
+        sales_starts_at: ticketForm.sales_starts_at
+          ? new Date(ticketForm.sales_starts_at).toISOString()
+          : null,
+        sales_ends_at: ticketForm.sales_ends_at
+          ? new Date(ticketForm.sales_ends_at).toISOString()
+          : null,
+        table_label: isTable ? ticketForm.table_label.trim() || null : null,
+        seats_per_table: isTable ? Math.max(1, Number(ticketForm.seats_per_table) || 1) : null,
       });
       if (error) throw error;
     },
     onSuccess: () => {
-      setTicketForm({ name: "", description: "", price: "0", quantity_total: "100" });
-      toast.success("Ticket type added.");
+      setTicketForm(emptyTicketForm);
+      toast.success("Ticket tier added.");
       void queryClient.invalidateQueries({ queryKey: ["organizer-ticket-types", eventId] });
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Could not add ticket."),
   });
+
+  const toggleTicketActive = useMutation({
+    mutationFn: async ({ id, is_active }: { id: string; is_active: boolean }) => {
+      const { error } = await supabase.from("ticket_types").update({ is_active }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["organizer-ticket-types", eventId] });
+    },
+    onError: () => toast.error("Could not update this tier."),
+  });
+
 
   const removeTicketType = useMutation({
     mutationFn: async (id: string) => {
