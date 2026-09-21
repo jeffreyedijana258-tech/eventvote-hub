@@ -79,18 +79,47 @@ function Home() {
       </section>
 
       <section className="mx-auto grid w-full max-w-7xl gap-4 px-4 py-14 sm:grid-cols-3 sm:px-6">
-        {[
-          { icon: Ticket, title: "Buy tickets safely", text: "Every payment is verified before your ticket code is issued." },
-          { icon: Vote, title: "Vote for nominees", text: "One secure vote per person, exactly as the organizer set it." },
-          { icon: CalendarCheck, title: "Track everything", text: "Tickets, votes, favourites and alerts in your dashboard." },
-        ].map(({ icon: Icon, title, text }) => (
-          <div key={title} className="rounded-xl border border-border/70 bg-card p-6">
+        {(
+          [
+            {
+              icon: Ticket,
+              title: "Buy tickets safely",
+              text: "Every payment is verified before your ticket code is issued.",
+              action: "Find an event",
+              to: "/events",
+            },
+            {
+              icon: Vote,
+              title: "Vote for nominees",
+              text: "One secure vote per person, exactly as the organizer set it.",
+              action: "See who's nominated",
+              to: "/events",
+            },
+            {
+              icon: CalendarCheck,
+              title: "Track everything",
+              text: "Tickets, votes, favourites and alerts in your dashboard.",
+              action: "Open my dashboard",
+              to: "/dashboard",
+            },
+          ] as const
+        ).map(({ icon: Icon, title, text, action, to }) => (
+          <Link
+            key={title}
+            to={to}
+            className="group flex flex-col rounded-xl border border-border/70 bg-card p-6 transition-colors hover:border-primary/50"
+          >
             <Icon className="mb-3 size-6 text-primary" />
             <h3 className="font-display text-lg font-bold">{title}</h3>
             <p className="mt-1 text-sm text-muted-foreground">{text}</p>
-          </div>
+            <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary">
+              {action}
+              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+            </span>
+          </Link>
         ))}
       </section>
+
 
       <section className="mx-auto w-full max-w-7xl px-4 pb-8 sm:px-6">
         <div className="mb-6 flex items-end justify-between gap-4">
