@@ -174,13 +174,21 @@ function Dashboard() {
                     {t.is_used ? "Used" : "Valid"}
                   </Badge>
                 </div>
-                <div className="rounded-lg border border-dashed border-primary/50 bg-primary/5 p-3 text-center">
-                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
-                    {tt?.name} · ticket code
-                  </p>
-                  <p className="font-display text-lg font-bold tracking-wider text-primary">
-                    {t.ticket_code}
-                  </p>
+                <div className="flex items-center gap-4 rounded-lg border border-dashed border-primary/50 bg-primary/5 p-3">
+                  <div className="rounded-md bg-white p-2">
+                    <QRCodeSVG value={t.ticket_code} size={84} level="M" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                      {tt?.name} · ticket code
+                    </p>
+                    <p className="font-display text-lg font-bold tracking-wider text-primary">
+                      {t.ticket_code}
+                    </p>
+                    <p className="mt-1 text-[10px] text-muted-foreground">
+                      Show this QR code at the entrance.
+                    </p>
+                  </div>
                 </div>
               </Card>
             );
