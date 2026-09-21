@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ImageUpload } from "@/components/ImageUpload";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { EVENT_CATEGORIES } from "@/lib/format";
@@ -139,13 +140,11 @@ function CreateEvent() {
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="cover">Cover image URL</Label>
-            <Input
-              id="cover"
+            <Label>Event graphic</Label>
+            <ImageUpload
               value={form.cover_image_url}
-              maxLength={500}
-              placeholder="https://…"
-              onChange={(e) => set("cover_image_url", e.target.value)}
+              onChange={(url) => set("cover_image_url", url)}
+              label="Event graphic"
             />
           </div>
 

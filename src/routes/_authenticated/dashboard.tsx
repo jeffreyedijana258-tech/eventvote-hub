@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { Bell, Heart, Sparkles, Ticket, Vote } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -174,13 +175,21 @@ function Dashboard() {
                     {t.is_used ? "Used" : "Valid"}
                   </Badge>
                 </div>
-                <div className="rounded-lg border border-dashed border-primary/50 bg-primary/5 p-3 text-center">
-                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
-                    {tt?.name} · ticket code
-                  </p>
-                  <p className="font-display text-lg font-bold tracking-wider text-primary">
-                    {t.ticket_code}
-                  </p>
+                <div className="flex items-center gap-4 rounded-lg border border-dashed border-primary/50 bg-primary/5 p-3">
+                  <div className="rounded-md bg-white p-2">
+                    <QRCodeSVG value={t.ticket_code} size={84} level="M" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                      {tt?.name} · ticket code
+                    </p>
+                    <p className="font-display text-lg font-bold tracking-wider text-primary">
+                      {t.ticket_code}
+                    </p>
+                    <p className="mt-1 text-[10px] text-muted-foreground">
+                      Show this QR code at the entrance.
+                    </p>
+                  </div>
                 </div>
               </Card>
             );
