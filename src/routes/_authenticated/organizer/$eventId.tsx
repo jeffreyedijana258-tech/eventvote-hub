@@ -16,6 +16,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { EVENT_CATEGORIES, formatDateTime, formatNaira, splitCommission } from "@/lib/format";
+import {
+  TICKET_TIER_KINDS,
+  TIER_LABELS,
+  saleWindow,
+  tierLabel,
+  type TicketTierKind,
+} from "@/lib/tiers";
 import { checkInTicket } from "@/lib/tickets.functions";
 
 export const Route = createFileRoute("/_authenticated/organizer/$eventId")({
