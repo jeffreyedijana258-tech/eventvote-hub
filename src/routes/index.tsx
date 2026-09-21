@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, BadgeCheck, CalendarCheck, Headset, Mail, Phone, Ticket, Vote } from "lucide-react";
 import heroImage from "@/assets/hero-crowd.jpg";
+import heroVideo from "@/assets/votix-hero.mp4.asset.json";
 import { EventCard, type EventCardData } from "@/components/EventCard";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
