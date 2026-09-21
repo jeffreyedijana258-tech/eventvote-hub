@@ -263,24 +263,58 @@ function EventDetail() {
           )}
           {(ticketTypes ?? []).map((tt) => {
             const remaining = tt.quantity_total - tt.quantity_sold;
+            const window = saleWindow(tt);
             const qty = quantities[tt.id] ?? 1;
+            const isTable = tt.tier_kind === "table";
+            const maxQty = Math.max(1, Math.min(10, remaining));
             return (
               <Card key={tt.id} className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <p className="font-display text-lg font-bold">{tt.name}</p>
-                  <p className="text-sm text-muted-foreground">{tt.description}</p>
+                <div className="space-y-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="font-display text-lg font-bold">{tt.name}</p>
+                    <Badge variant="secondary">{tierLabel(tt.tier_kind)}</Badge>
+                    {!window.onSale && (
+                      <Badge variant="outline">
+                        {window.reason === "sold_out"
+                          ? "Sold out"
+                          : window.reason === "not_started"
+                            ? "Not on sale yet"
+                            : "Sales closed"}
+                      </Badge>
+                    )}
+                  </div>
+                  {tt.description && (
+                    <p className="text-sm text-muted-foreground">{tt.description}</p>
+                  )}
                   <p className="mt-1 text-sm">
                     <span className="font-semibold text-primary">
                       {Number(tt.price) === 0 ? "Free" : formatNaira(tt.price)}
                     </span>{" "}
-                    · {remaining > 0 ? `${remaining} left` : "Sold out"}
+                    · {remaining > 0 ? `${remaining} ${isTable ? "table(s)" : "left"}` : "Sold out"}
                   </p>
+                  {isTable && (
+                    <p className="text-xs text-muted-foreground">
+                      {tt.table_label ? `${tt.table_label} · ` : ""}
+                      Seats {tt.seats_per_table ?? 0} guests per table
+                    </p>
+                  )}
+                  {tt.sales_starts_at && window.reason === "not_started" && (
+                    <p className="text-xs text-muted-foreground">
+                      Opens {formatDateTime(tt.sales_starts_at)}
+                    </p>
+                  )}
+                  {tt.sales_ends_at && window.onSale && (
+                    <p className="text-xs text-muted-foreground">
+                      Sales close {formatDateTime(tt.sales_ends_at)}
+                    </p>
+                  )}
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-1 rounded-md border border-border">
                     <Button
                       variant="ghost"
                       size="icon"
+                      disabled={!window.onSale}
                       onClick={() => setQuantities((q) => ({ ...q, [tt.id]: Math.max(1, qty - 1) }))}
                     >
                       <Minus className="size-4" />
@@ -289,13 +323,14 @@ function EventDetail() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => setQuantities((q) => ({ ...q, [tt.id]: Math.min(10, qty + 1) }))}
+                      disabled={!window.onSale}
+                      onClick={() => setQuantities((q) => ({ ...q, [tt.id]: Math.min(maxQty, qty + 1) }))}
                     >
                       <Plus className="size-4" />
                     </Button>
                   </div>
                   <Button
-                    disabled={remaining <= 0 || buy.isPending}
+                    disabled={!window.onSale || buy.isPending}
                     className="votix-gradient-bg font-semibold text-primary-foreground"
                     onClick={() =>
                       user
@@ -303,13 +338,22 @@ function EventDetail() {
                         : navigate({ to: "/auth", search: { redirect: `/events/${eventId}` } })
                     }
                   >
-                    {remaining <= 0 ? "Sold out" : buy.isPending ? "Processing…" : "Buy ticket"}
+                    {window.reason === "sold_out"
+                      ? "Sold out"
+                      : !window.onSale
+                        ? "Unavailable"
+                        : buy.isPending
+                          ? "Processing…"
+                          : isTable
+                            ? "Book table"
+                            : "Buy ticket"}
                   </Button>
                 </div>
               </Card>
             );
           })}
         </TabsContent>
+
 
         {event.voting_enabled && (
           <TabsContent value="vote" className="mt-6 space-y-4">
