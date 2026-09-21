@@ -45,11 +45,15 @@ function Home() {
   return (
     <div>
       <section className="relative overflow-hidden">
-        <img
-          src={heroImage}
-          alt="Crowd celebrating at a live event"
-          width={1600}
-          height={1008}
+        <video
+          src={heroVideo.url}
+          poster={heroImage}
+          autoPlay
+          muted
+          loop
+          playsInline
+          aria-hidden="true"
+          preload="auto"
           className="absolute inset-0 size-full object-cover opacity-40"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/80 to-background" />
