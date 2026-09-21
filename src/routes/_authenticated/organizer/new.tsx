@@ -139,13 +139,11 @@ function CreateEvent() {
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="cover">Cover image URL</Label>
-            <Input
-              id="cover"
+            <Label>Event graphic</Label>
+            <ImageUpload
               value={form.cover_image_url}
-              maxLength={500}
-              placeholder="https://…"
-              onChange={(e) => set("cover_image_url", e.target.value)}
+              onChange={(url) => set("cover_image_url", url)}
+              label="Event graphic"
             />
           </div>
 
