@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight, BadgeCheck, CalendarCheck, Ticket, Vote } from "lucide-react";
+import { ArrowRight, BadgeCheck, CalendarCheck, Headset, Mail, Phone, Ticket, Vote } from "lucide-react";
 import heroImage from "@/assets/hero-crowd.jpg";
 import { EventCard, type EventCardData } from "@/components/EventCard";
 import { Button } from "@/components/ui/button";
@@ -122,6 +122,47 @@ function Home() {
             ))}
           </div>
         )}
+      </section>
+
+      <section className="mx-auto w-full max-w-7xl px-4 py-14 sm:px-6">
+        <div className="mb-6">
+          <h2 className="font-display text-2xl font-bold sm:text-3xl">Enquiries</h2>
+          <p className="text-sm text-muted-foreground">
+            Questions about events, tickets or voting? Reach the VOTIX team.
+          </p>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-3">
+          <a
+            href="tel:09167566262"
+            className="group rounded-xl border border-border/70 bg-card p-6 transition-colors hover:border-primary/50"
+          >
+            <Phone className="mb-3 size-6 text-primary" />
+            <h3 className="font-display text-lg font-bold">Call us</h3>
+            <p className="mt-1 text-sm text-muted-foreground group-hover:text-foreground">
+              09167566262
+            </p>
+          </a>
+          <a
+            href="mailto:votix2026@gmail.com"
+            className="group rounded-xl border border-border/70 bg-card p-6 transition-colors hover:border-primary/50"
+          >
+            <Mail className="mb-3 size-6 text-primary" />
+            <h3 className="font-display text-lg font-bold">Email us</h3>
+            <p className="mt-1 break-all text-sm text-muted-foreground group-hover:text-foreground">
+              votix2026@gmail.com
+            </p>
+          </a>
+          <a
+            href="mailto:support@votixnigeria.com"
+            className="group rounded-xl border border-border/70 bg-card p-6 transition-colors hover:border-primary/50"
+          >
+            <Headset className="mb-3 size-6 text-primary" />
+            <h3 className="font-display text-lg font-bold">Support</h3>
+            <p className="mt-1 break-all text-sm text-muted-foreground group-hover:text-foreground">
+              support@votixnigeria.com
+            </p>
+          </a>
+        </div>
       </section>
     </div>
   );
