@@ -5,5 +5,5 @@
 - [x] Event page shows all on-sale tiers with badges, table info, quantity picker and checkout
 - [x] QR code + unique ticket code on purchased tickets in the dashboard
 - [x] Event graphic + nominee photo uploads (Cloud storage)
-- [ ] Paystack secret key — needed before paid tickets can be charged
+- [x] Paystack secret key saved and verified — paid tickets can be charged
 - [ ] Grant super-admin access once the owner signs up
