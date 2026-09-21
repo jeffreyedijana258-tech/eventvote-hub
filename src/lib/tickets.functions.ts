@@ -33,11 +33,20 @@ export const startTicketPurchase = createServerFn({ method: "POST" })
 
     const { data: ticketType, error: ttError } = await supabaseAdmin
       .from("ticket_types")
-      .select("id, name, price, quantity_total, quantity_sold, is_active, event_id")
+      .select(
+        "id, name, price, quantity_total, quantity_sold, is_active, event_id, sales_starts_at, sales_ends_at",
+      )
       .eq("id", data.ticketTypeId)
       .maybeSingle();
     if (ttError) throw new Error(ttError.message);
     if (!ticketType || !ticketType.is_active) throw new Error("This ticket is not available.");
+
+    const now = Date.now();
+    if (ticketType.sales_starts_at && new Date(ticketType.sales_starts_at).getTime() > now)
+      throw new Error("Sales for this ticket have not opened yet.");
+    if (ticketType.sales_ends_at && new Date(ticketType.sales_ends_at).getTime() < now)
+      throw new Error("Sales for this ticket have closed.");
+
 
     const { data: event, error: evError } = await supabaseAdmin
       .from("events")
