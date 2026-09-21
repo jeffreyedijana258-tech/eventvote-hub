@@ -435,34 +435,111 @@ function ManageEvent() {
 
         <TabsContent value="tickets" className="mt-6 space-y-4">
           <Card className="space-y-4 p-6">
-            <p className="font-display font-bold">Add a ticket type</p>
+            <p className="font-display font-bold">Add a ticket tier</p>
             <div className="grid gap-3 sm:grid-cols-2">
-              <Input
-                placeholder="Name (e.g. Regular)"
-                value={ticketForm.name}
-                maxLength={60}
-                onChange={(e) => setTicketForm({ ...ticketForm, name: e.target.value })}
-              />
-              <Input
-                placeholder="Short description"
-                value={ticketForm.description}
-                maxLength={150}
-                onChange={(e) => setTicketForm({ ...ticketForm, description: e.target.value })}
-              />
-              <Input
-                type="number"
-                min={0}
-                placeholder="Price (₦)"
-                value={ticketForm.price}
-                onChange={(e) => setTicketForm({ ...ticketForm, price: e.target.value })}
-              />
-              <Input
-                type="number"
-                min={1}
-                placeholder="Quantity"
-                value={ticketForm.quantity_total}
-                onChange={(e) => setTicketForm({ ...ticketForm, quantity_total: e.target.value })}
-              />
+              <div className="space-y-2">
+                <Label>Tier type</Label>
+                <Select
+                  value={ticketForm.tier_kind}
+                  onValueChange={(v) =>
+                    setTicketForm({
+                      ...ticketForm,
+                      tier_kind: v as TicketTierKind,
+                      name:
+                        v === "custom"
+                          ? ticketForm.name
+                          : TIER_LABELS[v as TicketTierKind],
+                    })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {TICKET_TIER_KINDS.map((k) => (
+                      <SelectItem key={k} value={k}>
+                        {TIER_LABELS[k]}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Ticket name</Label>
+                <Input
+                  placeholder="e.g. Regular, VIP, Platinum"
+                  value={ticketForm.name}
+                  maxLength={60}
+                  onChange={(e) => setTicketForm({ ...ticketForm, name: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2 sm:col-span-2">
+                <Label>Description</Label>
+                <Input
+                  placeholder="What this ticket includes"
+                  value={ticketForm.description}
+                  maxLength={200}
+                  onChange={(e) => setTicketForm({ ...ticketForm, description: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>{isTable ? "Table price (₦)" : "Price (₦)"}</Label>
+                <Input
+                  type="number"
+                  min={0}
+                  value={ticketForm.price}
+                  onChange={(e) => setTicketForm({ ...ticketForm, price: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>{isTable ? "Tables available" : "Quantity available"}</Label>
+                <Input
+                  type="number"
+                  min={1}
+                  value={ticketForm.quantity_total}
+                  onChange={(e) => setTicketForm({ ...ticketForm, quantity_total: e.target.value })}
+                />
+              </div>
+              {isTable && (
+                <>
+                  <div className="space-y-2">
+                    <Label>Table name / number</Label>
+                    <Input
+                      placeholder="e.g. Table A1"
+                      value={ticketForm.table_label}
+                      maxLength={60}
+                      onChange={(e) => setTicketForm({ ...ticketForm, table_label: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Seats per table</Label>
+                    <Input
+                      type="number"
+                      min={1}
+                      value={ticketForm.seats_per_table}
+                      onChange={(e) =>
+                        setTicketForm({ ...ticketForm, seats_per_table: e.target.value })
+                      }
+                    />
+                  </div>
+                </>
+              )}
+              <div className="space-y-2">
+                <Label>Sales start</Label>
+                <Input
+                  type="datetime-local"
+                  value={ticketForm.sales_starts_at}
+                  onChange={(e) => setTicketForm({ ...ticketForm, sales_starts_at: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Sales end</Label>
+                <Input
+                  type="datetime-local"
+                  value={ticketForm.sales_ends_at}
+                  onChange={(e) => setTicketForm({ ...ticketForm, sales_ends_at: e.target.value })}
+                />
+              </div>
             </div>
             <p className="text-xs text-muted-foreground">
               On a {formatNaira(Number(ticketForm.price) || 0)} ticket you receive{" "}
@@ -472,24 +549,79 @@ function ManageEvent() {
               disabled={!ticketForm.name.trim() || addTicketType.isPending}
               onClick={() => addTicketType.mutate()}
             >
-              <Plus className="mr-2 size-4" /> Add ticket type
+              <Plus className="mr-2 size-4" /> Add ticket tier
             </Button>
           </Card>
 
-          {(ticketTypes ?? []).map((tt) => (
-            <Card key={tt.id} className="flex flex-wrap items-center justify-between gap-3 p-5">
-              <div>
-                <p className="font-semibold">{tt.name}</p>
-                <p className="text-xs text-muted-foreground">
-                  {Number(tt.price) === 0 ? "Free" : formatNaira(tt.price)} · {tt.quantity_sold}/
-                  {tt.quantity_total} sold
-                </p>
-              </div>
-              <Button variant="ghost" size="icon" onClick={() => removeTicketType.mutate(tt.id)}>
-                <Trash2 className="size-4 text-destructive" />
-              </Button>
+          {(ticketTypes ?? []).length === 0 && (
+            <Card className="p-8 text-center text-sm text-muted-foreground">
+              No ticket tiers yet. Add Regular, VIP, VVIP, Table or your own tier above.
             </Card>
-          ))}
+          )}
+
+          {(ticketTypes ?? []).map((tt) => {
+            const window = saleWindow(tt);
+            const remaining = tt.quantity_total - tt.quantity_sold;
+            return (
+              <Card key={tt.id} className="space-y-3 p-5">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="space-y-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <p className="font-display font-bold">{tt.name}</p>
+                      <Badge variant="secondary">{tierLabel(tt.tier_kind)}</Badge>
+                      <Badge variant={window.onSale ? "default" : "secondary"}>
+                        {tt.is_active
+                          ? window.onSale
+                            ? "On sale"
+                            : window.reason === "sold_out"
+                              ? "Sold out"
+                              : window.reason === "not_started"
+                                ? "Scheduled"
+                                : "Closed"
+                          : "Inactive"}
+                      </Badge>
+                    </div>
+                    {tt.description && (
+                      <p className="text-xs text-muted-foreground">{tt.description}</p>
+                    )}
+                    <p className="text-xs text-muted-foreground">
+                      {Number(tt.price) === 0 ? "Free" : formatNaira(tt.price)} · {tt.quantity_sold}/
+                      {tt.quantity_total} sold · {Math.max(remaining, 0)} left
+                    </p>
+                    {tt.tier_kind === "table" && (
+                      <p className="text-xs text-muted-foreground">
+                        {tt.table_label ? `${tt.table_label} · ` : ""}
+                        {tt.seats_per_table ?? 0} seats per table
+                      </p>
+                    )}
+                    {(tt.sales_starts_at || tt.sales_ends_at) && (
+                      <p className="text-xs text-muted-foreground">
+                        Sales {tt.sales_starts_at ? `from ${formatDateTime(tt.sales_starts_at)}` : ""}
+                        {tt.sales_ends_at ? ` until ${formatDateTime(tt.sales_ends_at)}` : ""}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-muted-foreground">Active</span>
+                      <Switch
+                        checked={tt.is_active}
+                        onCheckedChange={(v) =>
+                          toggleTicketActive.mutate({ id: tt.id, is_active: v })
+                        }
+                      />
+                    </div>
+                    <Button variant="ghost" size="icon" onClick={() => removeTicketType.mutate(tt.id)}>
+                      <Trash2 className="size-4 text-destructive" />
+                    </Button>
+                  </div>
+                </div>
+                <Progress
+                  value={tt.quantity_total ? (tt.quantity_sold / tt.quantity_total) * 100 : 0}
+                />
+              </Card>
+            );
+          })}
         </TabsContent>
 
         <TabsContent value="nominees" className="mt-6 space-y-4">
