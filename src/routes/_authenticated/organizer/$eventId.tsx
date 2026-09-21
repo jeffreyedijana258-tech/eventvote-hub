@@ -384,11 +384,11 @@ function ManageEvent() {
                 <Input type="datetime-local" value={form.ends_at} onChange={(e) => setForm({ ...form, ends_at: e.target.value })} />
               </div>
               <div className="space-y-2 sm:col-span-2">
-                <Label>Cover image URL</Label>
-                <Input
+                <Label>Event graphic</Label>
+                <ImageUpload
                   value={form.cover_image_url}
-                  maxLength={500}
-                  onChange={(e) => setForm({ ...form, cover_image_url: e.target.value })}
+                  onChange={(url) => setForm({ ...form, cover_image_url: url })}
+                  label="Event graphic"
                 />
               </div>
             </div>
