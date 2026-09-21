@@ -1,8 +1,9 @@
 # VOTIX roadmap
 
-- [x] Ticket tiers: database fields (kind, sales window, table name/seats, active)
-- [ ] Ticket tiers: organizer management UI
-- [ ] Ticket tiers: event page display + checkout
-- [ ] QR code on purchased tickets
-- [ ] Event graphics upload (cover image + nominee photos) via Cloud storage
-- [ ] Paystack secret key (waiting on David)
+- [x] Ticket tiers (Regular/VIP/VVIP/Table/Platinum/Custom) with price, quantity, description, sales window, active status
+- [x] Table tiers: table label, seats per table, table price, sold/available state
+- [x] Event page shows all on-sale tiers with badges, table info, quantity picker and checkout
+- [x] QR code + unique ticket code on purchased tickets in the dashboard
+- [x] Event graphic + nominee photo uploads (Cloud storage)
+- [ ] Paystack secret key — needed before paid tickets can be charged
+- [ ] Grant super-admin access once the owner signs up
