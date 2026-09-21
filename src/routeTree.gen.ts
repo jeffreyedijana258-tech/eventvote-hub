@@ -16,6 +16,8 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as EventsEventIdRouteImport } from './routes/events.$eventId'
+import { Route as AuthenticatedOrganizerIndexRouteImport } from './routes/_authenticated/organizer/index'
+import { Route as AuthenticatedOrganizerNewRouteImport } from './routes/_authenticated/organizer/new'
 import { Route as AuthenticatedPaymentCallbackRouteImport } from './routes/_authenticated/payment.callback'
 
 const IndexRoute = IndexRouteImport.update({
@@ -52,6 +54,18 @@ const EventsEventIdRoute = EventsEventIdRouteImport.update({
   path: '/events/$eventId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedOrganizerIndexRoute =
+  AuthenticatedOrganizerIndexRouteImport.update({
+    id: '/organizer/',
+    path: '/organizer/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedOrganizerNewRoute =
+  AuthenticatedOrganizerNewRouteImport.update({
+    id: '/organizer/new',
+    path: '/organizer/new',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedPaymentCallbackRoute =
   AuthenticatedPaymentCallbackRouteImport.update({
     id: '/payment/callback',
@@ -66,7 +80,9 @@ export interface FileRoutesByFullPath {
   '/profile': typeof AuthenticatedProfileRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/events/': typeof EventsIndexRoute
+  '/organizer/new': typeof AuthenticatedOrganizerNewRoute
   '/payment/callback': typeof AuthenticatedPaymentCallbackRoute
+  '/organizer/': typeof AuthenticatedOrganizerIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -75,7 +91,9 @@ export interface FileRoutesByTo {
   '/profile': typeof AuthenticatedProfileRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/events': typeof EventsIndexRoute
+  '/organizer/new': typeof AuthenticatedOrganizerNewRoute
   '/payment/callback': typeof AuthenticatedPaymentCallbackRoute
+  '/organizer': typeof AuthenticatedOrganizerIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -86,7 +104,9 @@ export interface FileRoutesById {
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/events/': typeof EventsIndexRoute
+  '/_authenticated/organizer/new': typeof AuthenticatedOrganizerNewRoute
   '/_authenticated/payment/callback': typeof AuthenticatedPaymentCallbackRoute
+  '/_authenticated/organizer/': typeof AuthenticatedOrganizerIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,7 +117,9 @@ export interface FileRouteTypes {
     | '/profile'
     | '/events/$eventId'
     | '/events/'
+    | '/organizer/new'
     | '/payment/callback'
+    | '/organizer/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -106,7 +128,9 @@ export interface FileRouteTypes {
     | '/profile'
     | '/events/$eventId'
     | '/events'
+    | '/organizer/new'
     | '/payment/callback'
+    | '/organizer'
   id:
     | '__root__'
     | '/'
@@ -116,7 +140,9 @@ export interface FileRouteTypes {
     | '/_authenticated/profile'
     | '/events/$eventId'
     | '/events/'
+    | '/_authenticated/organizer/new'
     | '/_authenticated/payment/callback'
+    | '/_authenticated/organizer/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -178,6 +204,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsEventIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/organizer/': {
+      id: '/_authenticated/organizer/'
+      path: '/organizer'
+      fullPath: '/organizer/'
+      preLoaderRoute: typeof AuthenticatedOrganizerIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/organizer/new': {
+      id: '/_authenticated/organizer/new'
+      path: '/organizer/new'
+      fullPath: '/organizer/new'
+      preLoaderRoute: typeof AuthenticatedOrganizerNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/payment/callback': {
       id: '/_authenticated/payment/callback'
       path: '/payment/callback'
@@ -191,13 +231,17 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedOrganizerNewRoute: typeof AuthenticatedOrganizerNewRoute
   AuthenticatedPaymentCallbackRoute: typeof AuthenticatedPaymentCallbackRoute
+  AuthenticatedOrganizerIndexRoute: typeof AuthenticatedOrganizerIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedOrganizerNewRoute: AuthenticatedOrganizerNewRoute,
   AuthenticatedPaymentCallbackRoute: AuthenticatedPaymentCallbackRoute,
+  AuthenticatedOrganizerIndexRoute: AuthenticatedOrganizerIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
