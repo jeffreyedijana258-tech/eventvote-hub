@@ -369,6 +369,12 @@ export type Database = {
           price: number
           quantity_sold: number
           quantity_total: number
+          sales_ends_at: string | null
+          sales_starts_at: string | null
+          seats_per_table: number | null
+          sort_order: number
+          table_label: string | null
+          tier_kind: Database["public"]["Enums"]["ticket_tier_kind"]
         }
         Insert: {
           created_at?: string
@@ -380,6 +386,12 @@ export type Database = {
           price?: number
           quantity_sold?: number
           quantity_total?: number
+          sales_ends_at?: string | null
+          sales_starts_at?: string | null
+          seats_per_table?: number | null
+          sort_order?: number
+          table_label?: string | null
+          tier_kind?: Database["public"]["Enums"]["ticket_tier_kind"]
         }
         Update: {
           created_at?: string
@@ -391,6 +403,12 @@ export type Database = {
           price?: number
           quantity_sold?: number
           quantity_total?: number
+          sales_ends_at?: string | null
+          sales_starts_at?: string | null
+          seats_per_table?: number | null
+          sort_order?: number
+          table_label?: string | null
+          tier_kind?: Database["public"]["Enums"]["ticket_tier_kind"]
         }
         Relationships: [
           {
@@ -545,6 +563,13 @@ export type Database = {
         | "completed"
         | "cancelled"
       payment_status: "pending" | "success" | "failed"
+      ticket_tier_kind:
+        | "regular"
+        | "vip"
+        | "vvip"
+        | "table"
+        | "platinum"
+        | "custom"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -682,6 +707,14 @@ export const Constants = {
         "cancelled",
       ],
       payment_status: ["pending", "success", "failed"],
+      ticket_tier_kind: [
+        "regular",
+        "vip",
+        "vvip",
+        "table",
+        "platinum",
+        "custom",
+      ],
     },
   },
 } as const
