@@ -647,12 +647,15 @@ function ManageEvent() {
                 maxLength={100}
                 onChange={(e) => setCandidateForm({ ...candidateForm, position: e.target.value })}
               />
-              <Input
-                placeholder="Photo URL"
-                value={candidateForm.image_url}
-                maxLength={500}
-                onChange={(e) => setCandidateForm({ ...candidateForm, image_url: e.target.value })}
-              />
+              <div className="space-y-2">
+                <Label>Nominee photo</Label>
+                <ImageUpload
+                  value={candidateForm.image_url}
+                  onChange={(url) => setCandidateForm({ ...candidateForm, image_url: url })}
+                  label="Nominee photo"
+                  aspect="square"
+                />
+              </div>
               <Textarea
                 placeholder="Short bio"
                 value={candidateForm.bio}
