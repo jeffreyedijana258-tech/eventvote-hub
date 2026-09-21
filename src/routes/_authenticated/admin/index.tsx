@@ -55,7 +55,7 @@ function AdminPage() {
 
   const moderateEvent = useMutation({
     mutationFn: (input: { eventId: string; status: "approved" | "rejected"; reason?: string }) =>
-      moderate({ data: input }),
+      moderate({ data: input as { eventId: string; status: "approved" | "rejected" } }),
     onSuccess: () => {
       toast.success("Event updated.");
       void queryClient.invalidateQueries({ queryKey: ["admin-overview"] });
@@ -159,7 +159,11 @@ function AdminPage() {
                   variant="destructive"
                   disabled={e.status === "rejected"}
                   onClick={() =>
-                    moderateEvent.mutate({ eventId: e.id, status: "rejected", reason: reason[e.id] })
+                    moderateEvent.mutate({
+                      eventId: e.id,
+                      status: "rejected",
+                      ...(reason[e.id] ? { reason: reason[e.id]! } : {}),
+                    })
                   }
                 >
                   Reject

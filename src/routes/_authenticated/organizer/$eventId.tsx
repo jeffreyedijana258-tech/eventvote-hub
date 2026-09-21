@@ -128,7 +128,7 @@ function ManageEvent() {
   }, [event]);
 
   const saveEvent = useMutation({
-    mutationFn: async (status?: string) => {
+    mutationFn: async (status?: "draft" | "pending" | "approved" | "rejected" | "cancelled" | "completed") => {
       const { error } = await supabase
         .from("events")
         .update({

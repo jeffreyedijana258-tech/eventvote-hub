@@ -129,7 +129,7 @@ type AdminClient = Awaited<
 async function finalizeOrder(
   supabaseAdmin: AdminClient,
   orderId: string,
-  raw: Record<string, unknown> | null,
+  raw: unknown,
 ) {
   const { data: order } = await supabaseAdmin
     .from("ticket_orders")
@@ -170,7 +170,7 @@ async function finalizeOrder(
   if (existingPayment) {
     await supabaseAdmin
       .from("payments")
-      .update({ status: "success", raw_response: raw })
+      .update({ status: "success", raw_response: raw as never })
       .eq("id", existingPayment.id);
   } else {
     await supabaseAdmin.from("payments").insert({
@@ -180,7 +180,7 @@ async function finalizeOrder(
       amount: order.gross_amount,
       commission_amount: order.commission_amount,
       status: "success",
-      raw_response: raw,
+      raw_response: raw as never,
     });
   }
 
@@ -251,12 +251,12 @@ export const verifyTicketPayment = createServerFn({ method: "POST" })
       await supabaseAdmin.from("ticket_orders").update({ status: "failed" }).eq("id", order.id);
       await supabaseAdmin
         .from("payments")
-        .update({ status: "failed", raw_response: payload as Record<string, unknown> })
+        .update({ status: "failed", raw_response: payload as never })
         .eq("reference", order.reference);
       return { status: "failed" as const, reference: order.reference };
     }
 
-    await finalizeOrder(supabaseAdmin, order.id, payload as Record<string, unknown>);
+    await finalizeOrder(supabaseAdmin, order.id, payload);
     return { status: "success" as const, reference: order.reference };
   });
 

@@ -43,10 +43,23 @@ function EventDetail() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("events")
-        .select("*, profiles:organizer_id(full_name, username, avatar_url)")
+        .select("*")
         .eq("id", eventId)
         .maybeSingle();
       if (error) throw error;
+      return data;
+    },
+  });
+
+  const { data: organizerProfile } = useQuery({
+    queryKey: ["organizer-profile", event?.organizer_id],
+    enabled: !!event?.organizer_id,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("full_name")
+        .eq("id", event!.organizer_id)
+        .maybeSingle();
       return data;
     },
   });
@@ -179,7 +192,8 @@ function EventDetail() {
     );
   }
 
-  const organizer = (event.profiles ?? null) as { full_name: string | null } | null;
+
+  const organizerName = organizerProfile?.full_name ?? null;
   const totalVotes = (resultData?.results ?? []).reduce((sum, r) => sum + r.votes, 0);
   const votesUsed = myVotes?.length ?? 0;
   const votesLeft = Math.max((event.max_votes_per_user ?? 1) - votesUsed, 0);
@@ -211,7 +225,7 @@ function EventDetail() {
             <span className="flex items-center gap-1.5">
               <MapPin className="size-4 text-primary" /> {event.location ?? "Online"}
             </span>
-            <span>Hosted by {organizer?.full_name ?? "VOTIX organizer"}</span>
+            <span>Hosted by {organizerName ?? "a VOTIX organizer"}</span>
           </div>
           <div className="flex gap-3">
             <Button
