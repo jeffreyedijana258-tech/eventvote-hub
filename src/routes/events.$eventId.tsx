@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDateTime, formatNaira } from "@/lib/format";
+import { saleWindow, tierLabel } from "@/lib/tiers";
 import { startTicketPurchase } from "@/lib/tickets.functions";
 import { castVote, getEventResults } from "@/lib/votes.functions";
 
@@ -72,6 +73,7 @@ function EventDetail() {
         .select("*")
         .eq("event_id", eventId)
         .eq("is_active", true)
+        .order("sort_order", { ascending: true })
         .order("price", { ascending: true });
       if (error) throw error;
       return data ?? [];
