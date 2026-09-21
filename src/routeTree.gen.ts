@@ -16,7 +16,9 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as EventsEventIdRouteImport } from './routes/events.$eventId'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedOrganizerIndexRouteImport } from './routes/_authenticated/organizer/index'
+import { Route as AuthenticatedOrganizerEventIdRouteImport } from './routes/_authenticated/organizer/$eventId'
 import { Route as AuthenticatedOrganizerNewRouteImport } from './routes/_authenticated/organizer/new'
 import { Route as AuthenticatedPaymentCallbackRouteImport } from './routes/_authenticated/payment.callback'
 
@@ -54,10 +56,21 @@ const EventsEventIdRoute = EventsEventIdRouteImport.update({
   path: '/events/$eventId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedOrganizerIndexRoute =
   AuthenticatedOrganizerIndexRouteImport.update({
     id: '/organizer/',
     path: '/organizer/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedOrganizerEventIdRoute =
+  AuthenticatedOrganizerEventIdRouteImport.update({
+    id: '/organizer/$eventId',
+    path: '/organizer/$eventId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedOrganizerNewRoute =
@@ -80,8 +93,10 @@ export interface FileRoutesByFullPath {
   '/profile': typeof AuthenticatedProfileRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/events/': typeof EventsIndexRoute
+  '/organizer/$eventId': typeof AuthenticatedOrganizerEventIdRoute
   '/organizer/new': typeof AuthenticatedOrganizerNewRoute
   '/payment/callback': typeof AuthenticatedPaymentCallbackRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
   '/organizer/': typeof AuthenticatedOrganizerIndexRoute
 }
 export interface FileRoutesByTo {
@@ -91,8 +106,10 @@ export interface FileRoutesByTo {
   '/profile': typeof AuthenticatedProfileRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/events': typeof EventsIndexRoute
+  '/organizer/$eventId': typeof AuthenticatedOrganizerEventIdRoute
   '/organizer/new': typeof AuthenticatedOrganizerNewRoute
   '/payment/callback': typeof AuthenticatedPaymentCallbackRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
   '/organizer': typeof AuthenticatedOrganizerIndexRoute
 }
 export interface FileRoutesById {
@@ -104,8 +121,10 @@ export interface FileRoutesById {
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/events/': typeof EventsIndexRoute
+  '/_authenticated/organizer/$eventId': typeof AuthenticatedOrganizerEventIdRoute
   '/_authenticated/organizer/new': typeof AuthenticatedOrganizerNewRoute
   '/_authenticated/payment/callback': typeof AuthenticatedPaymentCallbackRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/organizer/': typeof AuthenticatedOrganizerIndexRoute
 }
 export interface FileRouteTypes {
@@ -117,8 +136,10 @@ export interface FileRouteTypes {
     | '/profile'
     | '/events/$eventId'
     | '/events/'
+    | '/organizer/$eventId'
     | '/organizer/new'
     | '/payment/callback'
+    | '/admin/'
     | '/organizer/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -128,8 +149,10 @@ export interface FileRouteTypes {
     | '/profile'
     | '/events/$eventId'
     | '/events'
+    | '/organizer/$eventId'
     | '/organizer/new'
     | '/payment/callback'
+    | '/admin'
     | '/organizer'
   id:
     | '__root__'
@@ -140,8 +163,10 @@ export interface FileRouteTypes {
     | '/_authenticated/profile'
     | '/events/$eventId'
     | '/events/'
+    | '/_authenticated/organizer/$eventId'
     | '/_authenticated/organizer/new'
     | '/_authenticated/payment/callback'
+    | '/_authenticated/admin/'
     | '/_authenticated/organizer/'
   fileRoutesById: FileRoutesById
 }
@@ -204,11 +229,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsEventIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/organizer/': {
       id: '/_authenticated/organizer/'
       path: '/organizer'
       fullPath: '/organizer/'
       preLoaderRoute: typeof AuthenticatedOrganizerIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/organizer/$eventId': {
+      id: '/_authenticated/organizer/$eventId'
+      path: '/organizer/$eventId'
+      fullPath: '/organizer/$eventId'
+      preLoaderRoute: typeof AuthenticatedOrganizerEventIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/organizer/new': {
@@ -231,16 +270,20 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedOrganizerEventIdRoute: typeof AuthenticatedOrganizerEventIdRoute
   AuthenticatedOrganizerNewRoute: typeof AuthenticatedOrganizerNewRoute
   AuthenticatedPaymentCallbackRoute: typeof AuthenticatedPaymentCallbackRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedOrganizerIndexRoute: typeof AuthenticatedOrganizerIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedOrganizerEventIdRoute: AuthenticatedOrganizerEventIdRoute,
   AuthenticatedOrganizerNewRoute: AuthenticatedOrganizerNewRoute,
   AuthenticatedPaymentCallbackRoute: AuthenticatedPaymentCallbackRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   AuthenticatedOrganizerIndexRoute: AuthenticatedOrganizerIndexRoute,
 }
 
