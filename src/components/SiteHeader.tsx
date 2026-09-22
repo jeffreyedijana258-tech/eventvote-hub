@@ -166,10 +166,20 @@ export function SiteHeader() {
                     )}
                   </>
                 )}
-                {!user && (
+                {!user ? (
                   <Link to="/auth" onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm font-medium hover:bg-secondary">
                     Sign in
                   </Link>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setOpen(false);
+                      void handleSignOut();
+                    }}
+                    className="flex items-center gap-2 rounded-md px-3 py-2 text-left text-sm font-medium text-destructive hover:bg-secondary"
+                  >
+                    <LogOut className="size-4" /> Sign out
+                  </button>
                 )}
                 <Badge variant="outline" className="mt-4 w-fit">
                   5% platform fee per ticket
