@@ -53,17 +53,14 @@ function EventDetail() {
   });
 
   const { data: organizerProfile } = useQuery({
-    queryKey: ["organizer-profile", event?.organizer_id],
-    enabled: !!event?.organizer_id,
+    queryKey: ["organizer-profile", event?.id],
+    enabled: !!event?.id,
     queryFn: async () => {
-      const { data } = await supabase
-        .from("profiles")
-        .select("full_name")
-        .eq("id", event!.organizer_id)
-        .maybeSingle();
-      return data;
+      const { data } = await supabase.rpc("event_organizer_name", { _event_id: event!.id });
+      return { full_name: (data as string | null) ?? null };
     },
   });
+
 
   const { data: ticketTypes } = useQuery({
     queryKey: ["ticket-types", eventId],
