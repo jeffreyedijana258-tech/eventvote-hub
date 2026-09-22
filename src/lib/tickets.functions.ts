@@ -283,7 +283,10 @@ export const verifyTicketPayment = createServerFn({ method: "POST" })
 /** Organizer / admin scan: mark a ticket code as used. */
 export const checkInTicket = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) => z.object({ code: z.string().min(4) }).parse(input))
+  .inputValidator((input: unknown) =>
+    z.object({ code: z.string().trim().min(12).max(64) }).parse(input),
+  )
+
   .handler(async ({ data, context }) => {
     const { data: ticket, error } = await context.supabase
       .from("tickets")
