@@ -544,6 +544,7 @@ export type Database = {
     }
     Functions: {
       event_is_public: { Args: { _event_id: string }; Returns: boolean }
+      event_organizer_name: { Args: { _event_id: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
