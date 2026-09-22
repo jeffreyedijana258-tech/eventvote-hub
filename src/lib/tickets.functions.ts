@@ -4,10 +4,21 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const COMMISSION_RATE = 0.05;
 
-function makeReference(prefix: string) {
-  const random = Math.random().toString(36).slice(2, 8).toUpperCase();
-  return `${prefix}-${Date.now().toString(36).toUpperCase()}-${random}`;
+const CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+/** Cryptographically random, non-guessable code (~100 bits of entropy). */
+function randomCode(length: number) {
+  const bytes = new Uint8Array(length);
+  crypto.getRandomValues(bytes);
+  let out = "";
+  for (const byte of bytes) out += CODE_ALPHABET[byte % CODE_ALPHABET.length];
+  return out;
 }
+
+function makeReference(prefix: string) {
+  return `${prefix}-${randomCode(6)}-${randomCode(14)}`;
+}
+
 
 function money(value: number) {
   return Math.round(value * 100) / 100;
