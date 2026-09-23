@@ -253,13 +253,6 @@ function EventDetail() {
           <TabsTrigger value="results">Results</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="about" className="mt-6">
-          <Card className="p-6">
-            <p className="whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
-              {event.description ?? "The organizer hasn't added a description yet."}
-            </p>
-          </Card>
-        </TabsContent>
 
         <TabsContent value="tickets" className="mt-6 space-y-4">
           {(ticketTypes ?? []).length === 0 && (
