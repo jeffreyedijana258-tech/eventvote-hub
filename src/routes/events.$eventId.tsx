@@ -353,6 +353,13 @@ function EventDetail() {
           })}
         </TabsContent>
 
+        <TabsContent value="about" className="mt-6">
+          <Card className="p-6">
+            <p className="whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
+              {event.description ?? "The organizer hasn't added a description yet."}
+            </p>
+          </Card>
+        </TabsContent>
 
         {event.voting_enabled && (
           <TabsContent value="vote" className="mt-6 space-y-4">
