@@ -93,23 +93,30 @@ export const adminOverview = createServerFn({ method: "POST" })
     await assertAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    const [{ data: orders }, { data: users }, { data: events }, { data: votes }] =
-      await Promise.all([
-        supabaseAdmin
-          .from("ticket_orders")
-          .select("id, reference, status, gross_amount, commission_amount, organizer_amount, quantity, created_at, event_id, user_id")
-          .order("created_at", { ascending: false })
-          .limit(200),
-        supabaseAdmin.from("profiles").select("id, full_name, username, created_at").order("created_at", { ascending: false }).limit(200),
-        supabaseAdmin
-          .from("events")
-          .select("id, title, status, category, starts_at, organizer_id, created_at")
-          .order("created_at", { ascending: false })
-          .limit(200),
-        supabaseAdmin.from("votes").select("id"),
-      ]);
+    const [ordersRes, usersRes, eventsRes, votesRes, rolesRes] = await Promise.all([
+      supabaseAdmin
+        .from("ticket_orders")
+        .select("id, reference, status, gross_amount, commission_amount, organizer_amount, quantity, created_at, event_id, user_id")
+        .order("created_at", { ascending: false })
+        .limit(200),
+      supabaseAdmin.from("profiles").select("id, full_name, username, created_at").order("created_at", { ascending: false }).limit(200),
+      supabaseAdmin
+        .from("events")
+        .select("id, title, status, category, starts_at, organizer_id, created_at")
+        .order("created_at", { ascending: false })
+        .limit(200),
+      supabaseAdmin.from("votes").select("id"),
+      supabaseAdmin.from("user_roles").select("user_id, role"),
+    ]);
 
-    const { data: roles } = await supabaseAdmin.from("user_roles").select("user_id, role");
+    const firstError = [ordersRes, usersRes, eventsRes, votesRes, rolesRes].find((r) => r.error);
+    if (firstError?.error) throw new Error(firstError.error.message);
+
+    const orders = ordersRes.data;
+    const users = usersRes.data;
+    const events = eventsRes.data;
+    const votes = votesRes.data;
+    const roles = rolesRes.data;
 
     const successful = (orders ?? []).filter((o) => o.status === "success");
     const totals = successful.reduce(
