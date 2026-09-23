@@ -6,4 +6,5 @@
 - [x] QR code + unique ticket code on purchased tickets in the dashboard
 - [x] Event graphic + nominee photo uploads (Cloud storage)
 - [x] Paystack secret key saved and verified — paid tickets can be charged
-- [ ] Grant super-admin access once the owner signs up
+- [x] Super admin access granted to votix2026@gmail.com
+- [x] Votix QR Scanner: camera scanning, manual code entry, one-time atomic check-in, attendance log, scan history
