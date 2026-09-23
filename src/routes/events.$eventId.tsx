@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { toast } from "sonner";
-import { CalendarDays, Heart, MapPin, Minus, Plus, Trophy, Vote as VoteIcon } from "lucide-react";
+import { CalendarDays, Heart, MapPin, Minus, Plus, Ticket, Trophy, Vote as VoteIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -245,7 +245,7 @@ function EventDetail() {
         </div>
       </div>
 
-      <Tabs defaultValue="about" className="mt-8">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-8">
         <TabsList className="flex-wrap">
           <TabsTrigger value="about">About</TabsTrigger>
           <TabsTrigger value="tickets">Tickets</TabsTrigger>
