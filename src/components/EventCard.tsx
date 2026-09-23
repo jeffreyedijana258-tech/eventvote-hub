@@ -48,6 +48,9 @@ export function EventCard({ event }: { event: EventCardData }) {
           <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <MapPin className="size-3.5" /> {event.location ?? "Online"}
           </p>
+          <span className="votix-gradient-bg mt-2 flex w-full items-center justify-center rounded-md px-4 py-2 text-sm font-bold uppercase tracking-wide text-primary-foreground transition-transform group-hover:scale-[1.02]">
+            Get a ticket
+          </span>
         </div>
       </Card>
     </Link>
