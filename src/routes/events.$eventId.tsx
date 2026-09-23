@@ -38,6 +38,7 @@ function EventDetail() {
   const vote = useServerFn(castVote);
   const results = useServerFn(getEventResults);
   const [quantities, setQuantities] = useState<Record<string, number>>({});
+  const [activeTab, setActiveTab] = useState("about");
 
   const { data: event, isLoading } = useQuery({
     queryKey: ["event", eventId],
@@ -226,7 +227,13 @@ function EventDetail() {
             </span>
             <span>Hosted by {organizerName ?? "a VOTIX organizer"}</span>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
+            <Button
+              onClick={() => setActiveTab("tickets")}
+              className="votix-gradient-bg font-semibold uppercase tracking-wide text-primary-foreground"
+            >
+              <Ticket className="mr-2 size-4" /> Get a ticket
+            </Button>
             <Button
               variant="secondary"
               onClick={() => (user ? toggleFavorite.mutate() : navigate({ to: "/auth" }))}
