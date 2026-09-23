@@ -749,6 +749,11 @@ function ManageEvent() {
                 <ScanLine className="mr-2 size-4" /> Check in
               </Button>
             </div>
+            <Link to="/organizer/scan" className="block">
+              <Button variant="secondary" className="w-full font-semibold">
+                <ScanLine className="mr-2 size-4" /> Open Votix Scanner (camera)
+              </Button>
+            </Link>
           </Card>
         </TabsContent>
       </Tabs>
