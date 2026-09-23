@@ -31,15 +31,19 @@ function AdminPage() {
   const listReports = useServerFn(adminListReports);
   const [reason, setReason] = useState<Record<string, string>>({});
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch, isFetching } = useQuery({
     queryKey: ["admin-overview"],
     enabled: isAdmin,
+    retry: 2,
+    retryDelay: 800,
     queryFn: () => overview({}),
   });
 
   const { data: reports } = useQuery({
     queryKey: ["admin-reports"],
     enabled: isAdmin,
+    retry: 2,
+    retryDelay: 800,
     queryFn: () => listReports({}),
   });
 
