@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { BarChart3, Plus, Ticket, Vote, Wallet } from "lucide-react";
+import { BarChart3, Plus, ScanLine, Ticket, Vote, Wallet } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -96,11 +96,18 @@ function OrganizerHome() {
           <h1 className="font-display text-3xl font-bold">Organizer hub</h1>
           <p className="text-sm text-muted-foreground">Your events, sales and voting results.</p>
         </div>
-        <Link to="/organizer/new">
-          <Button className="votix-gradient-bg font-semibold text-primary-foreground">
-            <Plus className="mr-2 size-4" /> Create event
-          </Button>
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link to="/organizer/scan">
+            <Button variant="secondary" className="font-semibold">
+              <ScanLine className="mr-2 size-4" /> Votix Scanner
+            </Button>
+          </Link>
+          <Link to="/organizer/new">
+            <Button className="votix-gradient-bg font-semibold text-primary-foreground">
+              <Plus className="mr-2 size-4" /> Create event
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

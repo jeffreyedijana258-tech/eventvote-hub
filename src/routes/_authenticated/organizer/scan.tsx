@@ -10,7 +10,6 @@ import {
   CheckCircle2,
   Clock,
   Keyboard,
-  MapPin,
   RefreshCw,
   ScanLine,
   ShieldAlert,
@@ -485,4 +484,3 @@ function Detail({ label, value, mono }: { label: string; value: string; mono?: b
   );
 }
 
-export const _unused = MapPin;
