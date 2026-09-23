@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { toast } from "sonner";
-import { CalendarDays, Heart, MapPin, Minus, Plus, Trophy, Vote as VoteIcon } from "lucide-react";
+import { CalendarDays, Heart, MapPin, Minus, Plus, Ticket, Trophy, Vote as VoteIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -38,6 +38,7 @@ function EventDetail() {
   const vote = useServerFn(castVote);
   const results = useServerFn(getEventResults);
   const [quantities, setQuantities] = useState<Record<string, number>>({});
+  const [activeTab, setActiveTab] = useState("about");
 
   const { data: event, isLoading } = useQuery({
     queryKey: ["event", eventId],
@@ -226,7 +227,13 @@ function EventDetail() {
             </span>
             <span>Hosted by {organizerName ?? "a VOTIX organizer"}</span>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
+            <Button
+              onClick={() => setActiveTab("tickets")}
+              className="votix-gradient-bg font-semibold uppercase tracking-wide text-primary-foreground"
+            >
+              <Ticket className="mr-2 size-4" /> Get a ticket
+            </Button>
             <Button
               variant="secondary"
               onClick={() => (user ? toggleFavorite.mutate() : navigate({ to: "/auth" }))}
@@ -238,7 +245,7 @@ function EventDetail() {
         </div>
       </div>
 
-      <Tabs defaultValue="about" className="mt-8">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-8">
         <TabsList className="flex-wrap">
           <TabsTrigger value="about">About</TabsTrigger>
           <TabsTrigger value="tickets">Tickets</TabsTrigger>
