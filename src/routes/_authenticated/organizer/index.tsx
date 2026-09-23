@@ -26,7 +26,12 @@ function OrganizerHome() {
       await refresh();
       toast.success("You're an organizer now.");
     },
-    onError: () => toast.error("Could not unlock organizer access."),
+    onError: (error: unknown) =>
+      toast.error(
+        error instanceof Error && error.message
+          ? error.message
+          : "Could not unlock organizer access.",
+      ),
   });
 
   const { data: events } = useQuery({
