@@ -247,8 +247,8 @@ function EventDetail() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-8">
         <TabsList className="flex-wrap">
-          <TabsTrigger value="about">About</TabsTrigger>
           <TabsTrigger value="tickets">Tickets</TabsTrigger>
+          <TabsTrigger value="about">About</TabsTrigger>
           {event.voting_enabled && <TabsTrigger value="vote">Vote</TabsTrigger>}
           <TabsTrigger value="results">Results</TabsTrigger>
         </TabsList>
