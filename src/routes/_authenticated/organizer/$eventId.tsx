@@ -24,7 +24,7 @@ import {
   tierLabel,
   type TicketTierKind,
 } from "@/lib/tiers";
-import { checkInTicket } from "@/lib/tickets.functions";
+import { scanTicket } from "@/lib/scanner.functions";
 
 export const Route = createFileRoute("/_authenticated/organizer/$eventId")({
   component: ManageEvent,
@@ -40,7 +40,7 @@ function toLocalInput(value: string | null) {
 function ManageEvent() {
   const { eventId } = Route.useParams();
   const queryClient = useQueryClient();
-  const scan = useServerFn(checkInTicket);
+  const scan = useServerFn(scanTicket);
 
   const { data: event, isLoading } = useQuery({
     queryKey: ["organizer-event", eventId],
@@ -262,12 +262,13 @@ function ManageEvent() {
 
   const [code, setCode] = useState("");
   const checkIn = useMutation({
-    mutationFn: () => scan({ data: { code } }),
+    mutationFn: () => scan({ data: { code, eventId } }),
     onSuccess: (res) => {
       setCode("");
-      toast[res.alreadyUsed ? "warning" : "success"](
-        res.alreadyUsed ? "This ticket was already used." : "Ticket checked in.",
-      );
+      if (res.result === "valid") toast.success("Ticket checked in.");
+      else if (res.result === "already_used") toast.warning("This ticket was already used.");
+      else if (res.result === "wrong_event") toast.error("This ticket is for a different event.");
+      else toast.error("No ticket matches this code.");
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Invalid ticket."),
   });
@@ -749,6 +750,11 @@ function ManageEvent() {
                 <ScanLine className="mr-2 size-4" /> Check in
               </Button>
             </div>
+            <Link to="/organizer/scan" className="block">
+              <Button variant="secondary" className="w-full font-semibold">
+                <ScanLine className="mr-2 size-4" /> Open Votix Scanner (camera)
+              </Button>
+            </Link>
           </Card>
         </TabsContent>
       </Tabs>

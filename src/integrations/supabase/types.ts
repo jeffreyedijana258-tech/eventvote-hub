@@ -358,6 +358,51 @@ export type Database = {
           },
         ]
       }
+      ticket_scans: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          result: Database["public"]["Enums"]["scan_result"]
+          scanned_by: string
+          scanned_code: string
+          ticket_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          result: Database["public"]["Enums"]["scan_result"]
+          scanned_by: string
+          scanned_code: string
+          ticket_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          result?: Database["public"]["Enums"]["scan_result"]
+          scanned_by?: string
+          scanned_code?: string
+          ticket_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ticket_scans_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ticket_scans_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ticket_types: {
         Row: {
           created_at: string
@@ -543,6 +588,21 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_in_ticket: {
+        Args: { _code: string; _event_id: string }
+        Returns: {
+          attendee_name: string
+          checked_in_at: string
+          event_location: string
+          event_starts_at: string
+          event_title: string
+          result: Database["public"]["Enums"]["scan_result"]
+          ticket_code: string
+          ticket_id: string
+          tier_kind: Database["public"]["Enums"]["ticket_tier_kind"]
+          tier_name: string
+        }[]
+      }
       event_is_public: { Args: { _event_id: string }; Returns: boolean }
       event_organizer_name: { Args: { _event_id: string }; Returns: string }
       has_role: {
@@ -564,6 +624,7 @@ export type Database = {
         | "completed"
         | "cancelled"
       payment_status: "pending" | "success" | "failed"
+      scan_result: "valid" | "invalid" | "already_used" | "wrong_event"
       ticket_tier_kind:
         | "regular"
         | "vip"
@@ -708,6 +769,7 @@ export const Constants = {
         "cancelled",
       ],
       payment_status: ["pending", "success", "failed"],
+      scan_result: ["valid", "invalid", "already_used", "wrong_event"],
       ticket_tier_kind: [
         "regular",
         "vip",
