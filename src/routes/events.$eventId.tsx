@@ -38,7 +38,7 @@ function EventDetail() {
   const vote = useServerFn(castVote);
   const results = useServerFn(getEventResults);
   const [quantities, setQuantities] = useState<Record<string, number>>({});
-  const [activeTab, setActiveTab] = useState("about");
+  const [activeTab, setActiveTab] = useState("tickets");
 
   const { data: event, isLoading } = useQuery({
     queryKey: ["event", eventId],
@@ -248,7 +248,6 @@ function EventDetail() {
       <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-8">
         <TabsList className="flex-wrap">
           <TabsTrigger value="tickets">Tickets</TabsTrigger>
-          <TabsTrigger value="about">About</TabsTrigger>
           {event.voting_enabled && <TabsTrigger value="vote">Vote</TabsTrigger>}
           <TabsTrigger value="results">Results</TabsTrigger>
         </TabsList>
@@ -351,14 +350,6 @@ function EventDetail() {
               </Card>
             );
           })}
-        </TabsContent>
-
-        <TabsContent value="about" className="mt-6">
-          <Card className="p-6">
-            <p className="whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
-              {event.description ?? "The organizer hasn't added a description yet."}
-            </p>
-          </Card>
         </TabsContent>
 
         {event.voting_enabled && (
