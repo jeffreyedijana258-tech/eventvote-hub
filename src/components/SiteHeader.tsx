@@ -97,13 +97,12 @@ export function SiteHeader() {
                   <DropdownMenuItem asChild>
                     <Link to="/profile">Profile settings</Link>
                   </DropdownMenuItem>
-                  {isOrganizer && (
-                    <DropdownMenuItem asChild>
-                      <Link to="/organizer">
-                        <Sparkles className="mr-2 size-4" /> Organizer
-                      </Link>
-                    </DropdownMenuItem>
-                  )}
+                  <DropdownMenuItem asChild>
+                    <Link to="/organizer">
+                      <Sparkles className="mr-2 size-4" />{" "}
+                      {isOrganizer ? "Organizer" : "Become an organizer"}
+                    </Link>
+                  </DropdownMenuItem>
                   {isAdmin && (
                     <DropdownMenuItem asChild>
                       <Link to="/admin">
@@ -154,11 +153,9 @@ export function SiteHeader() {
                     <Link to="/dashboard" onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm font-medium hover:bg-secondary">
                       My dashboard
                     </Link>
-                    {isOrganizer && (
-                      <Link to="/organizer" onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm font-medium hover:bg-secondary">
-                        Organizer
-                      </Link>
-                    )}
+                    <Link to="/organizer" onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm font-medium hover:bg-secondary">
+                      {isOrganizer ? "Organizer" : "Become an organizer"}
+                    </Link>
                     {isAdmin && (
                       <Link to="/admin" onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm font-medium hover:bg-secondary">
                         Super admin
