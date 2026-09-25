@@ -31,7 +31,7 @@ export function SplashDismisser() {
   useEffect(() => {
     if (loading) return;
     const id = requestAnimationFrame(() => {
-      document.documentElement.dataset.splash = "done";
+      document.documentElement.dataset["splash"] = "done";
     });
     return () => cancelAnimationFrame(id);
   }, [loading]);
