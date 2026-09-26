@@ -148,7 +148,7 @@ function EventDetail() {
       const result = await purchase({
         data: {
           ticketTypeId,
-          quantity: quantities[ticketTypeId] ?? 1,
+          quantity: quantities[ticketTypeId] ?? 0,
           origin: window.location.origin,
           buyerName: buyer.name,
           buyerEmail: buyer.email,
@@ -270,7 +270,7 @@ function EventDetail() {
           {(ticketTypes ?? []).map((tt) => {
             const remaining = tt.quantity_total - tt.quantity_sold;
             const window = saleWindow(tt);
-            const qty = quantities[tt.id] ?? 1;
+            const qty = quantities[tt.id] ?? 0;
             const isTable = tt.tier_kind === "table";
             const maxQty = Math.max(1, Math.min(10, remaining));
             return (
@@ -321,7 +321,7 @@ function EventDetail() {
                       variant="ghost"
                       size="icon"
                       disabled={!window.onSale}
-                      onClick={() => setQuantities((q) => ({ ...q, [tt.id]: Math.max(1, qty - 1) }))}
+                      onClick={() => setQuantities((q) => ({ ...q, [tt.id]: Math.max(0, qty - 1) }))}
                     >
                       <Minus className="size-4" />
                     </Button>
