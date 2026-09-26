@@ -297,8 +297,13 @@ export type Database = {
       }
       ticket_orders: {
         Row: {
+          access_token: string | null
+          buyer_email: string | null
+          buyer_name: string | null
+          buyer_phone: string | null
           commission_amount: number
           created_at: string
+          email_sent_at: string | null
           event_id: string
           gross_amount: number
           id: string
@@ -309,11 +314,16 @@ export type Database = {
           ticket_type_id: string
           unit_price: number
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
+          access_token?: string | null
+          buyer_email?: string | null
+          buyer_name?: string | null
+          buyer_phone?: string | null
           commission_amount?: number
           created_at?: string
+          email_sent_at?: string | null
           event_id: string
           gross_amount?: number
           id?: string
@@ -324,11 +334,16 @@ export type Database = {
           ticket_type_id: string
           unit_price?: number
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
+          access_token?: string | null
+          buyer_email?: string | null
+          buyer_name?: string | null
+          buyer_phone?: string | null
           commission_amount?: number
           created_at?: string
+          email_sent_at?: string | null
           event_id?: string
           gross_amount?: number
           id?: string
@@ -339,7 +354,7 @@ export type Database = {
           ticket_type_id?: string
           unit_price?: number
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -467,6 +482,8 @@ export type Database = {
       }
       tickets: {
         Row: {
+          buyer_email: string | null
+          buyer_name: string | null
           created_at: string
           event_id: string
           id: string
@@ -475,9 +492,11 @@ export type Database = {
           ticket_code: string
           ticket_type_id: string
           used_at: string | null
-          user_id: string
+          user_id: string | null
         }
         Insert: {
+          buyer_email?: string | null
+          buyer_name?: string | null
           created_at?: string
           event_id: string
           id?: string
@@ -486,9 +505,11 @@ export type Database = {
           ticket_code: string
           ticket_type_id: string
           used_at?: string | null
-          user_id: string
+          user_id?: string | null
         }
         Update: {
+          buyer_email?: string | null
+          buyer_name?: string | null
           created_at?: string
           event_id?: string
           id?: string
@@ -497,7 +518,7 @@ export type Database = {
           ticket_code?: string
           ticket_type_id?: string
           used_at?: string | null
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {

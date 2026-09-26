@@ -16,12 +16,12 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as EventsEventIdRouteImport } from './routes/events.$eventId'
+import { Route as TicketsConfirmRouteImport } from './routes/tickets.confirm'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedOrganizerIndexRouteImport } from './routes/_authenticated/organizer/index'
 import { Route as AuthenticatedOrganizerEventIdRouteImport } from './routes/_authenticated/organizer/$eventId'
 import { Route as AuthenticatedOrganizerNewRouteImport } from './routes/_authenticated/organizer/new'
 import { Route as AuthenticatedOrganizerScanRouteImport } from './routes/_authenticated/organizer/scan'
-import { Route as AuthenticatedPaymentCallbackRouteImport } from './routes/_authenticated/payment.callback'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -57,6 +57,11 @@ const EventsEventIdRoute = EventsEventIdRouteImport.update({
   path: '/events/$eventId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TicketsConfirmRoute = TicketsConfirmRouteImport.update({
+  id: '/tickets/confirm',
+  path: '/tickets/confirm',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
@@ -86,12 +91,6 @@ const AuthenticatedOrganizerScanRoute =
     path: '/organizer/scan',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedPaymentCallbackRoute =
-  AuthenticatedPaymentCallbackRouteImport.update({
-    id: '/payment/callback',
-    path: '/payment/callback',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -99,11 +98,11 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/events/$eventId': typeof EventsEventIdRoute
+  '/tickets/confirm': typeof TicketsConfirmRoute
   '/events/': typeof EventsIndexRoute
   '/organizer/$eventId': typeof AuthenticatedOrganizerEventIdRoute
   '/organizer/new': typeof AuthenticatedOrganizerNewRoute
   '/organizer/scan': typeof AuthenticatedOrganizerScanRoute
-  '/payment/callback': typeof AuthenticatedPaymentCallbackRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/organizer/': typeof AuthenticatedOrganizerIndexRoute
 }
@@ -113,11 +112,11 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/events/$eventId': typeof EventsEventIdRoute
+  '/tickets/confirm': typeof TicketsConfirmRoute
   '/events': typeof EventsIndexRoute
   '/organizer/$eventId': typeof AuthenticatedOrganizerEventIdRoute
   '/organizer/new': typeof AuthenticatedOrganizerNewRoute
   '/organizer/scan': typeof AuthenticatedOrganizerScanRoute
-  '/payment/callback': typeof AuthenticatedPaymentCallbackRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/organizer': typeof AuthenticatedOrganizerIndexRoute
 }
@@ -129,11 +128,11 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/events/$eventId': typeof EventsEventIdRoute
+  '/tickets/confirm': typeof TicketsConfirmRoute
   '/events/': typeof EventsIndexRoute
   '/_authenticated/organizer/$eventId': typeof AuthenticatedOrganizerEventIdRoute
   '/_authenticated/organizer/new': typeof AuthenticatedOrganizerNewRoute
   '/_authenticated/organizer/scan': typeof AuthenticatedOrganizerScanRoute
-  '/_authenticated/payment/callback': typeof AuthenticatedPaymentCallbackRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/organizer/': typeof AuthenticatedOrganizerIndexRoute
 }
@@ -145,11 +144,11 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/profile'
     | '/events/$eventId'
+    | '/tickets/confirm'
     | '/events/'
     | '/organizer/$eventId'
     | '/organizer/new'
     | '/organizer/scan'
-    | '/payment/callback'
     | '/admin/'
     | '/organizer/'
   fileRoutesByTo: FileRoutesByTo
@@ -159,11 +158,11 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/profile'
     | '/events/$eventId'
+    | '/tickets/confirm'
     | '/events'
     | '/organizer/$eventId'
     | '/organizer/new'
     | '/organizer/scan'
-    | '/payment/callback'
     | '/admin'
     | '/organizer'
   id:
@@ -174,11 +173,11 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/profile'
     | '/events/$eventId'
+    | '/tickets/confirm'
     | '/events/'
     | '/_authenticated/organizer/$eventId'
     | '/_authenticated/organizer/new'
     | '/_authenticated/organizer/scan'
-    | '/_authenticated/payment/callback'
     | '/_authenticated/admin/'
     | '/_authenticated/organizer/'
   fileRoutesById: FileRoutesById
@@ -188,6 +187,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   EventsEventIdRoute: typeof EventsEventIdRoute
+  TicketsConfirmRoute: typeof TicketsConfirmRoute
   EventsIndexRoute: typeof EventsIndexRoute
 }
 
@@ -242,6 +242,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsEventIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tickets/confirm': {
+      id: '/tickets/confirm'
+      path: '/tickets/confirm'
+      fullPath: '/tickets/confirm'
+      preLoaderRoute: typeof TicketsConfirmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/admin/': {
       id: '/_authenticated/admin/'
       path: '/admin'
@@ -277,13 +284,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOrganizerScanRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/payment/callback': {
-      id: '/_authenticated/payment/callback'
-      path: '/payment/callback'
-      fullPath: '/payment/callback'
-      preLoaderRoute: typeof AuthenticatedPaymentCallbackRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
   }
 }
 
@@ -293,7 +293,6 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedOrganizerEventIdRoute: typeof AuthenticatedOrganizerEventIdRoute
   AuthenticatedOrganizerNewRoute: typeof AuthenticatedOrganizerNewRoute
   AuthenticatedOrganizerScanRoute: typeof AuthenticatedOrganizerScanRoute
-  AuthenticatedPaymentCallbackRoute: typeof AuthenticatedPaymentCallbackRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedOrganizerIndexRoute: typeof AuthenticatedOrganizerIndexRoute
 }
@@ -304,7 +303,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedOrganizerEventIdRoute: AuthenticatedOrganizerEventIdRoute,
   AuthenticatedOrganizerNewRoute: AuthenticatedOrganizerNewRoute,
   AuthenticatedOrganizerScanRoute: AuthenticatedOrganizerScanRoute,
-  AuthenticatedPaymentCallbackRoute: AuthenticatedPaymentCallbackRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   AuthenticatedOrganizerIndexRoute: AuthenticatedOrganizerIndexRoute,
 }
@@ -317,6 +315,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   EventsEventIdRoute: EventsEventIdRoute,
+  TicketsConfirmRoute: TicketsConfirmRoute,
   EventsIndexRoute: EventsIndexRoute,
 }
 export const routeTree = rootRouteImport

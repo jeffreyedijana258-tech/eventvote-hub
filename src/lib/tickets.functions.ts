@@ -2,6 +2,17 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
+/** Returns the signed-in user id if a valid bearer token was sent, else null. */
+async function optionalUserId(): Promise<string | null> {
+  const { getRequest } = await import("@tanstack/react-start/server");
+  const auth = getRequest()?.headers.get("authorization") ?? "";
+  const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
+  if (!token || token.startsWith("sb_")) return null;
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await supabaseAdmin.auth.getUser(token);
+  return data.user?.id ?? null;
+}
+
 const COMMISSION_RATE = 0.05;
 
 const CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -29,17 +40,21 @@ function money(value: number) {
  * Nothing is ever marked paid here.
  */
 export const startTicketPurchase = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
     z
       .object({
         ticketTypeId: z.string().uuid(),
         quantity: z.number().int().min(1).max(10),
-        callbackUrl: z.string().url(),
+        origin: z.string().url(),
+        buyerName: z.string().trim().min(2).max(100),
+        buyerEmail: z.string().trim().toLowerCase().email().max(255),
+        buyerPhone: z.string().trim().max(20).optional().or(z.literal("")),
       })
       .parse(input),
   )
-  .handler(async ({ data, context }) => {
+  .handler(async ({ data }) => {
+    const userId = await optionalUserId();
+    const origin = new URL(data.origin).origin;
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     const { data: ticketType, error: ttError } = await supabaseAdmin
@@ -75,12 +90,17 @@ export const startTicketPurchase = createServerFn({ method: "POST" })
     const commission = money(gross * COMMISSION_RATE);
     const organizerAmount = money(gross - commission);
     const reference = makeReference("VOTIX");
+    const accessToken = randomCode(32);
 
     const { data: order, error: orderError } = await supabaseAdmin
       .from("ticket_orders")
       .insert({
         reference,
-        user_id: context.userId,
+        user_id: userId,
+        buyer_name: data.buyerName,
+        buyer_email: data.buyerEmail,
+        buyer_phone: data.buyerPhone || null,
+        access_token: accessToken,
         event_id: event.id,
         ticket_type_id: ticketType.id,
         quantity: data.quantity,
@@ -97,22 +117,20 @@ export const startTicketPurchase = createServerFn({ method: "POST" })
     // Free tickets: issue immediately, no payment provider involved.
     if (gross <= 0) {
       await finalizeOrder(supabaseAdmin, order.id, null);
-      return { free: true as const, reference: order.reference, authorizationUrl: null };
+      return { free: true as const, reference: order.reference, token: accessToken, authorizationUrl: null };
     }
 
     const secret = process.env["PAYSTACK_SECRET_KEY"];
     if (!secret) throw new Error("Payments are not configured yet. Please contact support.");
 
-    const { data: authUser } = await supabaseAdmin.auth.admin.getUserById(context.userId);
-
     const res = await fetch("https://api.paystack.co/transaction/initialize", {
       method: "POST",
       headers: { Authorization: `Bearer ${secret}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        email: authUser?.user?.email ?? `${context.userId}@votix.app`,
+        email: data.buyerEmail,
         amount: Math.round(gross * 100),
         reference: order.reference,
-        callback_url: data.callbackUrl,
+        callback_url: `${origin}/tickets/confirm?t=${accessToken}`,
         metadata: { order_id: order.id, event_id: event.id, event_title: event.title },
       }),
     });
@@ -128,7 +146,7 @@ export const startTicketPurchase = createServerFn({ method: "POST" })
 
     await supabaseAdmin.from("payments").insert({
       order_id: order.id,
-      user_id: context.userId,
+      user_id: userId,
       reference: order.reference,
       amount: gross,
       commission_amount: commission,
@@ -138,6 +156,7 @@ export const startTicketPurchase = createServerFn({ method: "POST" })
     return {
       free: false as const,
       reference: order.reference,
+      token: accessToken,
       authorizationUrl: payload.data.authorization_url,
     };
   });
@@ -164,6 +183,8 @@ async function finalizeOrder(
     event_id: order.event_id,
     ticket_type_id: order.ticket_type_id,
     user_id: order.user_id,
+    buyer_name: order.buyer_name,
+    buyer_email: order.buyer_email,
     ticket_code: makeReference("TKT"),
   }));
 
@@ -211,12 +232,16 @@ async function finalizeOrder(
     .maybeSingle();
 
   await supabaseAdmin.from("notifications").insert([
-    {
-      user_id: order.user_id,
-      title: "Ticket confirmed",
-      body: `Your ${order.quantity} ticket(s) for ${event?.title ?? "the event"} are ready.`,
-      link: "/dashboard",
-    },
+    ...(order.user_id
+      ? [
+          {
+            user_id: order.user_id,
+            title: "Ticket confirmed",
+            body: `Your ${order.quantity} ticket(s) for ${event?.title ?? "the event"} are ready.`,
+            link: "/dashboard",
+          },
+        ]
+      : []),
     ...(event?.organizer_id
       ? [
           {
@@ -234,9 +259,10 @@ async function finalizeOrder(
 
 /** Server-side Paystack verification. A ticket only exists after this succeeds. */
 export const verifyTicketPayment = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) => z.object({ reference: z.string().min(4) }).parse(input))
-  .handler(async ({ data, context }) => {
+  .inputValidator((input: unknown) =>
+    z.object({ reference: z.string().min(4).max(64), token: z.string().min(16).max(64) }).parse(input),
+  )
+  .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     const { data: order } = await supabaseAdmin
@@ -245,9 +271,9 @@ export const verifyTicketPayment = createServerFn({ method: "POST" })
       .eq("reference", data.reference)
       .maybeSingle();
     if (!order) throw new Error("Order not found.");
-    if (order.user_id !== context.userId) throw new Error("This order is not yours.");
+    if (!order.access_token || order.access_token !== data.token) throw new Error("Order not found.");
     if (order.status === "success") {
-      return { status: "success" as const, reference: order.reference };
+      return { status: "success" as const, reference: order.reference, ...(await orderTickets(supabaseAdmin, order.id)) };
     }
 
     const secret = process.env["PAYSTACK_SECRET_KEY"];
@@ -277,8 +303,31 @@ export const verifyTicketPayment = createServerFn({ method: "POST" })
     }
 
     await finalizeOrder(supabaseAdmin, order.id, payload);
-    return { status: "success" as const, reference: order.reference };
+    return { status: "success" as const, reference: order.reference, ...(await orderTickets(supabaseAdmin, order.id)) };
   });
+
+async function orderTickets(supabaseAdmin: AdminClient, orderId: string) {
+  const { data: order } = await supabaseAdmin
+    .from("ticket_orders")
+    .select("buyer_name, buyer_email, events(title, starts_at, location), ticket_types(name)")
+    .eq("id", orderId)
+    .maybeSingle();
+  const { data: tickets } = await supabaseAdmin
+    .from("tickets")
+    .select("ticket_code")
+    .eq("order_id", orderId);
+  const ev = order?.events as unknown as { title: string; starts_at: string | null; location: string | null } | null;
+  const tt = order?.ticket_types as unknown as { name: string } | null;
+  return {
+    buyerName: order?.buyer_name ?? null,
+    buyerEmail: order?.buyer_email ?? null,
+    eventTitle: ev?.title ?? null,
+    eventStartsAt: ev?.starts_at ?? null,
+    eventLocation: ev?.location ?? null,
+    tierName: tt?.name ?? null,
+    codes: (tickets ?? []).map((t) => t.ticket_code),
+  };
+}
 
 /** Organizer / admin scan: mark a ticket code as used. */
 export const checkInTicket = createServerFn({ method: "POST" })
