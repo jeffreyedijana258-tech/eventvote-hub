@@ -336,7 +336,7 @@ function EventDetail() {
                     </Button>
                   </div>
                   <Button
-                    disabled={!window.onSale || buy.isPending}
+                    disabled={!window.onSale || buy.isPending || qty < 1}
                     className="votix-gradient-bg font-semibold text-primary-foreground"
                     onClick={() => {
                       setBuyer((b) => ({
