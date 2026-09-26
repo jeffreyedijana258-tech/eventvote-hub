@@ -16,6 +16,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Toaster } from "@/components/ui/sonner";
 import { SplashScreen, SplashDismisser } from "@/components/SplashScreen";
+import { InstallPrompt } from "@/components/InstallPrompt";
 import { supabase } from "@/integrations/supabase/client";
 
 function NotFoundComponent() {
@@ -159,6 +160,7 @@ function RootComponent() {
         </div>
         <Toaster position="top-center" />
         <SplashDismisser />
+        <InstallPrompt />
       </AuthProvider>
     </QueryClientProvider>
   );
