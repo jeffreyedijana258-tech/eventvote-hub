@@ -146,7 +146,7 @@ export const startTicketPurchase = createServerFn({ method: "POST" })
 
     await supabaseAdmin.from("payments").insert({
       order_id: order.id,
-      user_id: context.userId,
+      user_id: userId,
       reference: order.reference,
       amount: gross,
       commission_amount: commission,
