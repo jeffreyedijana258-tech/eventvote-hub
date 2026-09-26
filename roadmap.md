@@ -8,3 +8,4 @@
 - [x] Paystack secret key saved and verified — paid tickets can be charged
 - [x] Super admin access granted to votix2026@gmail.com
 - [x] Votix QR Scanner: camera scanning, manual code entry, one-time atomic check-in, attendance log, scan history
+- [ ] Guest checkout + email tickets from support@votixnigeria.com
