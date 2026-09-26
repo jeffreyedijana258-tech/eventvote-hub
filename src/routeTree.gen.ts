@@ -16,6 +16,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as EventsEventIdRouteImport } from './routes/events.$eventId'
+import { Route as TicketsConfirmRouteImport } from './routes/tickets.confirm'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedOrganizerIndexRouteImport } from './routes/_authenticated/organizer/index'
 import { Route as AuthenticatedOrganizerEventIdRouteImport } from './routes/_authenticated/organizer/$eventId'
@@ -56,6 +57,11 @@ const EventsEventIdRoute = EventsEventIdRouteImport.update({
   path: '/events/$eventId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TicketsConfirmRoute = TicketsConfirmRouteImport.update({
+  id: '/tickets/confirm',
+  path: '/tickets/confirm',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
@@ -92,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/events/$eventId': typeof EventsEventIdRoute
+  '/tickets/confirm': typeof TicketsConfirmRoute
   '/events/': typeof EventsIndexRoute
   '/organizer/$eventId': typeof AuthenticatedOrganizerEventIdRoute
   '/organizer/new': typeof AuthenticatedOrganizerNewRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/events/$eventId': typeof EventsEventIdRoute
+  '/tickets/confirm': typeof TicketsConfirmRoute
   '/events': typeof EventsIndexRoute
   '/organizer/$eventId': typeof AuthenticatedOrganizerEventIdRoute
   '/organizer/new': typeof AuthenticatedOrganizerNewRoute
@@ -120,6 +128,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/events/$eventId': typeof EventsEventIdRoute
+  '/tickets/confirm': typeof TicketsConfirmRoute
   '/events/': typeof EventsIndexRoute
   '/_authenticated/organizer/$eventId': typeof AuthenticatedOrganizerEventIdRoute
   '/_authenticated/organizer/new': typeof AuthenticatedOrganizerNewRoute
@@ -135,6 +144,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/profile'
     | '/events/$eventId'
+    | '/tickets/confirm'
     | '/events/'
     | '/organizer/$eventId'
     | '/organizer/new'
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/profile'
     | '/events/$eventId'
+    | '/tickets/confirm'
     | '/events'
     | '/organizer/$eventId'
     | '/organizer/new'
@@ -162,6 +173,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/profile'
     | '/events/$eventId'
+    | '/tickets/confirm'
     | '/events/'
     | '/_authenticated/organizer/$eventId'
     | '/_authenticated/organizer/new'
@@ -175,6 +187,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   EventsEventIdRoute: typeof EventsEventIdRoute
+  TicketsConfirmRoute: typeof TicketsConfirmRoute
   EventsIndexRoute: typeof EventsIndexRoute
 }
 
@@ -227,6 +240,13 @@ declare module '@tanstack/react-router' {
       path: '/events/$eventId'
       fullPath: '/events/$eventId'
       preLoaderRoute: typeof EventsEventIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tickets/confirm': {
+      id: '/tickets/confirm'
+      path: '/tickets/confirm'
+      fullPath: '/tickets/confirm'
+      preLoaderRoute: typeof TicketsConfirmRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin/': {
@@ -295,6 +315,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   EventsEventIdRoute: EventsEventIdRoute,
+  TicketsConfirmRoute: TicketsConfirmRoute,
   EventsIndexRoute: EventsIndexRoute,
 }
 export const routeTree = rootRouteImport

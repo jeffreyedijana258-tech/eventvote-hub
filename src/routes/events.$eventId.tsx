@@ -7,6 +7,9 @@ import { CalendarDays, Heart, MapPin, Minus, Plus, Ticket, Trophy, Vote as VoteI
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -31,7 +34,7 @@ export const Route = createFileRoute("/events/$eventId")({
 
 function EventDetail() {
   const { eventId } = Route.useParams();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const purchase = useServerFn(startTicketPurchase);
@@ -39,6 +42,8 @@ function EventDetail() {
   const results = useServerFn(getEventResults);
   const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [activeTab, setActiveTab] = useState("tickets");
+  const [checkoutTier, setCheckoutTier] = useState<string | null>(null);
+  const [buyer, setBuyer] = useState({ name: "", email: "", phone: "" });
 
   const { data: event, isLoading } = useQuery({
     queryKey: ["event", eventId],
@@ -144,15 +149,18 @@ function EventDetail() {
         data: {
           ticketTypeId,
           quantity: quantities[ticketTypeId] ?? 1,
-          callbackUrl: `${window.location.origin}/payment/callback`,
+          origin: window.location.origin,
+          buyerName: buyer.name,
+          buyerEmail: buyer.email,
+          buyerPhone: buyer.phone,
         },
       });
       return result;
     },
     onSuccess: (result) => {
       if (result.free) {
-        toast.success("Ticket issued! Check your dashboard.");
-        void navigate({ to: "/dashboard" });
+        toast.success("Ticket issued!");
+        void navigate({ to: "/tickets/confirm", search: { t: result.token, reference: result.reference } });
         return;
       }
       if (result.authorizationUrl) window.location.href = result.authorizationUrl;
@@ -330,11 +338,14 @@ function EventDetail() {
                   <Button
                     disabled={!window.onSale || buy.isPending}
                     className="votix-gradient-bg font-semibold text-primary-foreground"
-                    onClick={() =>
-                      user
-                        ? buy.mutate(tt.id)
-                        : navigate({ to: "/auth", search: { redirect: `/events/${eventId}` } })
-                    }
+                    onClick={() => {
+                      setBuyer((b) => ({
+                        name: b.name || profile?.full_name || "",
+                        email: b.email || user?.email || "",
+                        phone: b.phone || profile?.phone || "",
+                      }));
+                      setCheckoutTier(tt.id);
+                    }}
                   >
                     {window.reason === "sold_out"
                       ? "Sold out"
