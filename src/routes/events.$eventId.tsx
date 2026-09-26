@@ -438,6 +438,42 @@ function EventDetail() {
           </Card>
         </TabsContent>
       </Tabs>
+      <Dialog open={!!checkoutTier} onOpenChange={(o) => !o && setCheckoutTier(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Your details</DialogTitle>
+            <DialogDescription>
+              No account needed. We'll email your tickets and QR codes to this address.
+            </DialogDescription>
+          </DialogHeader>
+          <form
+            className="space-y-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (checkoutTier) buy.mutate(checkoutTier);
+            }}
+          >
+            <div className="space-y-2">
+              <Label htmlFor="buyer-name">Full name</Label>
+              <Input id="buyer-name" required minLength={2} maxLength={100} value={buyer.name}
+                onChange={(e) => setBuyer({ ...buyer, name: e.target.value })} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="buyer-email">Email (tickets are sent here)</Label>
+              <Input id="buyer-email" type="email" required maxLength={255} value={buyer.email}
+                onChange={(e) => setBuyer({ ...buyer, email: e.target.value })} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="buyer-phone">Phone (optional)</Label>
+              <Input id="buyer-phone" type="tel" maxLength={20} value={buyer.phone}
+                onChange={(e) => setBuyer({ ...buyer, phone: e.target.value })} />
+            </div>
+            <Button type="submit" disabled={buy.isPending} className="votix-gradient-bg w-full font-semibold text-primary-foreground">
+              {buy.isPending ? "Processing…" : "Continue to payment"}
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
