@@ -14,6 +14,206 @@ export type Database = {
   }
   public: {
     Tables: {
+      ad_events: {
+        Row: {
+          ad_id: string
+          created_at: string
+          id: string
+          kind: Database["public"]["Enums"]["ad_event_kind"]
+          placement: string | null
+          viewer_key: string
+        }
+        Insert: {
+          ad_id: string
+          created_at?: string
+          id?: string
+          kind: Database["public"]["Enums"]["ad_event_kind"]
+          placement?: string | null
+          viewer_key: string
+        }
+        Update: {
+          ad_id?: string
+          created_at?: string
+          id?: string
+          kind?: Database["public"]["Enums"]["ad_event_kind"]
+          placement?: string | null
+          viewer_key?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ad_events_ad_id_fkey"
+            columns: ["ad_id"]
+            isOneToOne: false
+            referencedRelation: "advertisements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ad_payments: {
+        Row: {
+          ad_id: string
+          amount: number
+          created_at: string
+          duration_days: number
+          id: string
+          plan_id: string
+          raw_response: Json | null
+          reference: string
+          status: Database["public"]["Enums"]["payment_status"]
+          user_id: string
+          verified_at: string | null
+        }
+        Insert: {
+          ad_id: string
+          amount: number
+          created_at?: string
+          duration_days: number
+          id?: string
+          plan_id: string
+          raw_response?: Json | null
+          reference: string
+          status?: Database["public"]["Enums"]["payment_status"]
+          user_id: string
+          verified_at?: string | null
+        }
+        Update: {
+          ad_id?: string
+          amount?: number
+          created_at?: string
+          duration_days?: number
+          id?: string
+          plan_id?: string
+          raw_response?: Json | null
+          reference?: string
+          status?: Database["public"]["Enums"]["payment_status"]
+          user_id?: string
+          verified_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ad_payments_ad_id_fkey"
+            columns: ["ad_id"]
+            isOneToOne: false
+            referencedRelation: "advertisements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ad_payments_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "ad_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ad_plans: {
+        Row: {
+          created_at: string
+          description: string | null
+          duration_days: number
+          id: string
+          is_active: boolean
+          name: string
+          price: number
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          duration_days?: number
+          id?: string
+          is_active?: boolean
+          name: string
+          price: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          duration_days?: number
+          id?: string
+          is_active?: boolean
+          name?: string
+          price?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      advertisements: {
+        Row: {
+          advertiser_id: string
+          created_at: string
+          description: string | null
+          destination_url: string | null
+          ends_at: string | null
+          event_id: string | null
+          id: string
+          paid_until: string | null
+          plan_id: string
+          rejection_reason: string | null
+          starts_at: string | null
+          status: Database["public"]["Enums"]["ad_status"]
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+          video_url: string
+        }
+        Insert: {
+          advertiser_id: string
+          created_at?: string
+          description?: string | null
+          destination_url?: string | null
+          ends_at?: string | null
+          event_id?: string | null
+          id?: string
+          paid_until?: string | null
+          plan_id: string
+          rejection_reason?: string | null
+          starts_at?: string | null
+          status?: Database["public"]["Enums"]["ad_status"]
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string
+          video_url: string
+        }
+        Update: {
+          advertiser_id?: string
+          created_at?: string
+          description?: string | null
+          destination_url?: string | null
+          ends_at?: string | null
+          event_id?: string | null
+          id?: string
+          paid_until?: string | null
+          plan_id?: string
+          rejection_reason?: string | null
+          starts_at?: string | null
+          status?: Database["public"]["Enums"]["ad_status"]
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string
+          video_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "advertisements_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "advertisements_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "ad_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       candidates: {
         Row: {
           bio: string | null
@@ -288,6 +488,107 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "reports_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      social_accounts: {
+        Row: {
+          access_token: string | null
+          created_at: string
+          display_name: string | null
+          expires_at: string | null
+          external_id: string | null
+          id: string
+          meta: Json | null
+          platform: Database["public"]["Enums"]["social_platform"]
+          refresh_token: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_token?: string | null
+          created_at?: string
+          display_name?: string | null
+          expires_at?: string | null
+          external_id?: string | null
+          id?: string
+          meta?: Json | null
+          platform: Database["public"]["Enums"]["social_platform"]
+          refresh_token?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_token?: string | null
+          created_at?: string
+          display_name?: string | null
+          expires_at?: string | null
+          external_id?: string | null
+          id?: string
+          meta?: Json | null
+          platform?: Database["public"]["Enums"]["social_platform"]
+          refresh_token?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      social_posts: {
+        Row: {
+          author_id: string
+          caption: string
+          created_at: string
+          event_id: string
+          hashtags: string | null
+          id: string
+          image_url: string | null
+          link_url: string | null
+          platforms: Database["public"]["Enums"]["social_platform"][]
+          results: Json
+          scheduled_at: string | null
+          status: Database["public"]["Enums"]["social_post_status"]
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          author_id: string
+          caption?: string
+          created_at?: string
+          event_id: string
+          hashtags?: string | null
+          id?: string
+          image_url?: string | null
+          link_url?: string | null
+          platforms?: Database["public"]["Enums"]["social_platform"][]
+          results?: Json
+          scheduled_at?: string | null
+          status?: Database["public"]["Enums"]["social_post_status"]
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          author_id?: string
+          caption?: string
+          created_at?: string
+          event_id?: string
+          hashtags?: string | null
+          id?: string
+          image_url?: string | null
+          link_url?: string | null
+          platforms?: Database["public"]["Enums"]["social_platform"][]
+          results?: Json
+          scheduled_at?: string | null
+          status?: Database["public"]["Enums"]["social_post_status"]
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "social_posts_event_id_fkey"
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events"
@@ -609,6 +910,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      ad_stats: {
+        Args: { _ad_ids: string[] }
+        Returns: {
+          ad_id: string
+          clicks: number
+          impressions: number
+          plays: number
+        }[]
+      }
       check_in_ticket: {
         Args: { _code: string; _event_id: string }
         Returns: {
@@ -626,6 +936,18 @@ export type Database = {
       }
       event_is_public: { Args: { _event_id: string }; Returns: boolean }
       event_organizer_name: { Args: { _event_id: string }; Returns: string }
+      get_live_ads: {
+        Args: { _limit?: number }
+        Returns: {
+          description: string
+          destination_url: string
+          event_id: string
+          id: string
+          thumbnail_url: string
+          title: string
+          video_url: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -634,8 +956,26 @@ export type Database = {
         Returns: boolean
       }
       owns_event: { Args: { _event_id: string }; Returns: boolean }
+      record_ad_event: {
+        Args: {
+          _ad_id: string
+          _kind: Database["public"]["Enums"]["ad_event_kind"]
+          _placement?: string
+          _viewer_key: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
+      ad_event_kind: "impression" | "play" | "click"
+      ad_status:
+        | "pending_payment"
+        | "pending_approval"
+        | "approved"
+        | "rejected"
+        | "paused"
+        | "archived"
+        | "expired"
       app_role: "user" | "organizer" | "admin"
       event_status:
         | "draft"
@@ -646,6 +986,13 @@ export type Database = {
         | "cancelled"
       payment_status: "pending" | "success" | "failed"
       scan_result: "valid" | "invalid" | "already_used" | "wrong_event"
+      social_platform: "facebook" | "instagram" | "tiktok"
+      social_post_status:
+        | "draft"
+        | "scheduled"
+        | "publishing"
+        | "published"
+        | "failed"
       ticket_tier_kind:
         | "regular"
         | "vip"
@@ -780,6 +1127,16 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      ad_event_kind: ["impression", "play", "click"],
+      ad_status: [
+        "pending_payment",
+        "pending_approval",
+        "approved",
+        "rejected",
+        "paused",
+        "archived",
+        "expired",
+      ],
       app_role: ["user", "organizer", "admin"],
       event_status: [
         "draft",
@@ -791,6 +1148,14 @@ export const Constants = {
       ],
       payment_status: ["pending", "success", "failed"],
       scan_result: ["valid", "invalid", "already_used", "wrong_event"],
+      social_platform: ["facebook", "instagram", "tiktok"],
+      social_post_status: [
+        "draft",
+        "scheduled",
+        "publishing",
+        "published",
+        "failed",
+      ],
       ticket_tier_kind: [
         "regular",
         "vip",
