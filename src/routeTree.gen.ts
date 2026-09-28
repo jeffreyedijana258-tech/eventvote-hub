@@ -22,6 +22,8 @@ import { Route as AuthenticatedOrganizerIndexRouteImport } from './routes/_authe
 import { Route as AuthenticatedOrganizerEventIdRouteImport } from './routes/_authenticated/organizer/$eventId'
 import { Route as AuthenticatedOrganizerNewRouteImport } from './routes/_authenticated/organizer/new'
 import { Route as AuthenticatedOrganizerScanRouteImport } from './routes/_authenticated/organizer/scan'
+import { Route as ApiPublicCronSocialPublishRouteImport } from './routes/api/public/cron.social-publish'
+import { Route as ApiPublicSocialCallbackProviderRouteImport } from './routes/api/public/social.callback.$provider'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -91,6 +93,18 @@ const AuthenticatedOrganizerScanRoute =
     path: '/organizer/scan',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiPublicCronSocialPublishRoute =
+  ApiPublicCronSocialPublishRouteImport.update({
+    id: '/api/public/cron/social-publish',
+    path: '/api/public/cron/social-publish',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicSocialCallbackProviderRoute =
+  ApiPublicSocialCallbackProviderRouteImport.update({
+    id: '/api/public/social/callback/$provider',
+    path: '/api/public/social/callback/$provider',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -105,6 +119,8 @@ export interface FileRoutesByFullPath {
   '/organizer/scan': typeof AuthenticatedOrganizerScanRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/organizer/': typeof AuthenticatedOrganizerIndexRoute
+  '/api/public/cron/social-publish': typeof ApiPublicCronSocialPublishRoute
+  '/api/public/social/callback/$provider': typeof ApiPublicSocialCallbackProviderRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -119,6 +135,8 @@ export interface FileRoutesByTo {
   '/organizer/scan': typeof AuthenticatedOrganizerScanRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/organizer': typeof AuthenticatedOrganizerIndexRoute
+  '/api/public/cron/social-publish': typeof ApiPublicCronSocialPublishRoute
+  '/api/public/social/callback/$provider': typeof ApiPublicSocialCallbackProviderRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -135,6 +153,8 @@ export interface FileRoutesById {
   '/_authenticated/organizer/scan': typeof AuthenticatedOrganizerScanRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/organizer/': typeof AuthenticatedOrganizerIndexRoute
+  '/api/public/cron/social-publish': typeof ApiPublicCronSocialPublishRoute
+  '/api/public/social/callback/$provider': typeof ApiPublicSocialCallbackProviderRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -151,6 +171,8 @@ export interface FileRouteTypes {
     | '/organizer/scan'
     | '/admin/'
     | '/organizer/'
+    | '/api/public/cron/social-publish'
+    | '/api/public/social/callback/$provider'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -165,6 +187,8 @@ export interface FileRouteTypes {
     | '/organizer/scan'
     | '/admin'
     | '/organizer'
+    | '/api/public/cron/social-publish'
+    | '/api/public/social/callback/$provider'
   id:
     | '__root__'
     | '/'
@@ -180,6 +204,8 @@ export interface FileRouteTypes {
     | '/_authenticated/organizer/scan'
     | '/_authenticated/admin/'
     | '/_authenticated/organizer/'
+    | '/api/public/cron/social-publish'
+    | '/api/public/social/callback/$provider'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -189,6 +215,8 @@ export interface RootRouteChildren {
   EventsEventIdRoute: typeof EventsEventIdRoute
   TicketsConfirmRoute: typeof TicketsConfirmRoute
   EventsIndexRoute: typeof EventsIndexRoute
+  ApiPublicCronSocialPublishRoute: typeof ApiPublicCronSocialPublishRoute
+  ApiPublicSocialCallbackProviderRoute: typeof ApiPublicSocialCallbackProviderRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -284,6 +312,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOrganizerScanRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/cron/social-publish': {
+      id: '/api/public/cron/social-publish'
+      path: '/api/public/cron/social-publish'
+      fullPath: '/api/public/cron/social-publish'
+      preLoaderRoute: typeof ApiPublicCronSocialPublishRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/social/callback/$provider': {
+      id: '/api/public/social/callback/$provider'
+      path: '/api/public/social/callback/$provider'
+      fullPath: '/api/public/social/callback/$provider'
+      preLoaderRoute: typeof ApiPublicSocialCallbackProviderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -317,6 +359,8 @@ const rootRouteChildren: RootRouteChildren = {
   EventsEventIdRoute: EventsEventIdRoute,
   TicketsConfirmRoute: TicketsConfirmRoute,
   EventsIndexRoute: EventsIndexRoute,
+  ApiPublicCronSocialPublishRoute: ApiPublicCronSocialPublishRoute,
+  ApiPublicSocialCallbackProviderRoute: ApiPublicSocialCallbackProviderRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
