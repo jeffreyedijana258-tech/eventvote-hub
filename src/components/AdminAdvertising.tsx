@@ -85,7 +85,7 @@ export function AdminAds() {
                     <>
                       <Button size="sm" onClick={() => mutate.mutate({ adId: ad.id, action: "approve" })}>Approve</Button>
                       <Input className="h-8 max-w-48" placeholder="Rejection reason" maxLength={300} value={reason[ad.id] ?? ""} onChange={(v) => setReason({ ...reason, [ad.id]: v.target.value })} />
-                      <Button size="sm" variant="destructive" onClick={() => mutate.mutate({ adId: ad.id, action: "reject", reason: reason[ad.id] })}>Reject</Button>
+                      <Button size="sm" variant="destructive" onClick={() => mutate.mutate({ adId: ad.id, action: "reject", reason: reason[ad.id] ?? "" })}>Reject</Button>
                     </>
                   )}
                   {ad.status === "approved" && <Button size="sm" variant="secondary" onClick={() => mutate.mutate({ adId: ad.id, action: "pause" })}>Pause</Button>}

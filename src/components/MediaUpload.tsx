@@ -32,12 +32,12 @@ export function MediaUpload({ kind, value, onChange }: Props) {
   const [busy, setBusy] = useState(false);
   const types = kind === "video" ? VIDEO_TYPES : IMAGE_TYPES;
 
-  async function handle(file: File) {
-    if (!user) return toast.error("Sign in to upload.");
+  async function handle(file: File): Promise<void> {
+    if (!user) { toast.error("Sign in to upload."); return; }
     if (!types.includes(file.type))
-      return toast.error(kind === "video" ? "Upload an MP4, WebM or MOV video." : "Upload a JPG, PNG or WebP image.");
+      { toast.error(kind === "video" ? "Upload an MP4, WebM or MOV video." : "Upload a JPG, PNG or WebP image."); return; }
     if (file.size > LIMITS[kind])
-      return toast.error(kind === "video" ? "Videos must be 50MB or smaller." : "Images must be 5MB or smaller.");
+      { toast.error(kind === "video" ? "Videos must be 50MB or smaller." : "Images must be 5MB or smaller."); return; }
     setBusy(true);
     try {
       if (kind === "video") {
