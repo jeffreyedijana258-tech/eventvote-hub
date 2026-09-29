@@ -23,6 +23,7 @@ import { Route as AuthenticatedAdsConfirmRouteImport } from './routes/_authentic
 import { Route as AuthenticatedOrganizerIndexRouteImport } from './routes/_authenticated/organizer/index'
 import { Route as AuthenticatedOrganizerEventIdRouteImport } from './routes/_authenticated/organizer/$eventId'
 import { Route as AuthenticatedOrganizerNewRouteImport } from './routes/_authenticated/organizer/new'
+import { Route as AuthenticatedOrganizerPromoteRouteImport } from './routes/_authenticated/organizer/promote'
 import { Route as AuthenticatedOrganizerScanRouteImport } from './routes/_authenticated/organizer/scan'
 import { Route as ApiPublicCronSocialPublishRouteImport } from './routes/api/public/cron.social-publish'
 import { Route as ApiPublicSocialCallbackProviderRouteImport } from './routes/api/public/social.callback.$provider'
@@ -99,6 +100,12 @@ const AuthenticatedOrganizerNewRoute =
     path: '/organizer/new',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedOrganizerPromoteRoute =
+  AuthenticatedOrganizerPromoteRouteImport.update({
+    id: '/organizer/promote',
+    path: '/organizer/promote',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedOrganizerScanRoute =
   AuthenticatedOrganizerScanRouteImport.update({
     id: '/organizer/scan',
@@ -129,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/ads/confirm': typeof AuthenticatedAdsConfirmRoute
   '/organizer/$eventId': typeof AuthenticatedOrganizerEventIdRoute
   '/organizer/new': typeof AuthenticatedOrganizerNewRoute
+  '/organizer/promote': typeof AuthenticatedOrganizerPromoteRoute
   '/organizer/scan': typeof AuthenticatedOrganizerScanRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/ads/': typeof AuthenticatedAdsIndexRoute
@@ -147,6 +155,7 @@ export interface FileRoutesByTo {
   '/ads/confirm': typeof AuthenticatedAdsConfirmRoute
   '/organizer/$eventId': typeof AuthenticatedOrganizerEventIdRoute
   '/organizer/new': typeof AuthenticatedOrganizerNewRoute
+  '/organizer/promote': typeof AuthenticatedOrganizerPromoteRoute
   '/organizer/scan': typeof AuthenticatedOrganizerScanRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/ads': typeof AuthenticatedAdsIndexRoute
@@ -167,6 +176,7 @@ export interface FileRoutesById {
   '/_authenticated/ads/confirm': typeof AuthenticatedAdsConfirmRoute
   '/_authenticated/organizer/$eventId': typeof AuthenticatedOrganizerEventIdRoute
   '/_authenticated/organizer/new': typeof AuthenticatedOrganizerNewRoute
+  '/_authenticated/organizer/promote': typeof AuthenticatedOrganizerPromoteRoute
   '/_authenticated/organizer/scan': typeof AuthenticatedOrganizerScanRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/ads/': typeof AuthenticatedAdsIndexRoute
@@ -187,6 +197,7 @@ export interface FileRouteTypes {
     | '/ads/confirm'
     | '/organizer/$eventId'
     | '/organizer/new'
+    | '/organizer/promote'
     | '/organizer/scan'
     | '/admin/'
     | '/ads/'
@@ -205,6 +216,7 @@ export interface FileRouteTypes {
     | '/ads/confirm'
     | '/organizer/$eventId'
     | '/organizer/new'
+    | '/organizer/promote'
     | '/organizer/scan'
     | '/admin'
     | '/ads'
@@ -224,6 +236,7 @@ export interface FileRouteTypes {
     | '/_authenticated/ads/confirm'
     | '/_authenticated/organizer/$eventId'
     | '/_authenticated/organizer/new'
+    | '/_authenticated/organizer/promote'
     | '/_authenticated/organizer/scan'
     | '/_authenticated/admin/'
     | '/_authenticated/ads/'
@@ -343,6 +356,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOrganizerNewRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/organizer/promote': {
+      id: '/_authenticated/organizer/promote'
+      path: '/organizer/promote'
+      fullPath: '/organizer/promote'
+      preLoaderRoute: typeof AuthenticatedOrganizerPromoteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/organizer/scan': {
       id: '/_authenticated/organizer/scan'
       path: '/organizer/scan'
@@ -373,6 +393,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdsConfirmRoute: typeof AuthenticatedAdsConfirmRoute
   AuthenticatedOrganizerEventIdRoute: typeof AuthenticatedOrganizerEventIdRoute
   AuthenticatedOrganizerNewRoute: typeof AuthenticatedOrganizerNewRoute
+  AuthenticatedOrganizerPromoteRoute: typeof AuthenticatedOrganizerPromoteRoute
   AuthenticatedOrganizerScanRoute: typeof AuthenticatedOrganizerScanRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedAdsIndexRoute: typeof AuthenticatedAdsIndexRoute
@@ -385,6 +406,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdsConfirmRoute: AuthenticatedAdsConfirmRoute,
   AuthenticatedOrganizerEventIdRoute: AuthenticatedOrganizerEventIdRoute,
   AuthenticatedOrganizerNewRoute: AuthenticatedOrganizerNewRoute,
+  AuthenticatedOrganizerPromoteRoute: AuthenticatedOrganizerPromoteRoute,
   AuthenticatedOrganizerScanRoute: AuthenticatedOrganizerScanRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   AuthenticatedAdsIndexRoute: AuthenticatedAdsIndexRoute,
