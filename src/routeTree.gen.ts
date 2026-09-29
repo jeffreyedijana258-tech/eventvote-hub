@@ -18,6 +18,8 @@ import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as EventsEventIdRouteImport } from './routes/events.$eventId'
 import { Route as TicketsConfirmRouteImport } from './routes/tickets.confirm'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedAdsIndexRouteImport } from './routes/_authenticated/ads/index'
+import { Route as AuthenticatedAdsConfirmRouteImport } from './routes/_authenticated/ads/confirm'
 import { Route as AuthenticatedOrganizerIndexRouteImport } from './routes/_authenticated/organizer/index'
 import { Route as AuthenticatedOrganizerEventIdRouteImport } from './routes/_authenticated/organizer/$eventId'
 import { Route as AuthenticatedOrganizerNewRouteImport } from './routes/_authenticated/organizer/new'
@@ -69,6 +71,16 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAdsIndexRoute = AuthenticatedAdsIndexRouteImport.update({
+  id: '/ads/',
+  path: '/ads/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdsConfirmRoute = AuthenticatedAdsConfirmRouteImport.update({
+  id: '/ads/confirm',
+  path: '/ads/confirm',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedOrganizerIndexRoute =
   AuthenticatedOrganizerIndexRouteImport.update({
     id: '/organizer/',
@@ -114,10 +126,12 @@ export interface FileRoutesByFullPath {
   '/events/$eventId': typeof EventsEventIdRoute
   '/tickets/confirm': typeof TicketsConfirmRoute
   '/events/': typeof EventsIndexRoute
+  '/ads/confirm': typeof AuthenticatedAdsConfirmRoute
   '/organizer/$eventId': typeof AuthenticatedOrganizerEventIdRoute
   '/organizer/new': typeof AuthenticatedOrganizerNewRoute
   '/organizer/scan': typeof AuthenticatedOrganizerScanRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/ads/': typeof AuthenticatedAdsIndexRoute
   '/organizer/': typeof AuthenticatedOrganizerIndexRoute
   '/api/public/cron/social-publish': typeof ApiPublicCronSocialPublishRoute
   '/api/public/social/callback/$provider': typeof ApiPublicSocialCallbackProviderRoute
@@ -130,10 +144,12 @@ export interface FileRoutesByTo {
   '/events/$eventId': typeof EventsEventIdRoute
   '/tickets/confirm': typeof TicketsConfirmRoute
   '/events': typeof EventsIndexRoute
+  '/ads/confirm': typeof AuthenticatedAdsConfirmRoute
   '/organizer/$eventId': typeof AuthenticatedOrganizerEventIdRoute
   '/organizer/new': typeof AuthenticatedOrganizerNewRoute
   '/organizer/scan': typeof AuthenticatedOrganizerScanRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/ads': typeof AuthenticatedAdsIndexRoute
   '/organizer': typeof AuthenticatedOrganizerIndexRoute
   '/api/public/cron/social-publish': typeof ApiPublicCronSocialPublishRoute
   '/api/public/social/callback/$provider': typeof ApiPublicSocialCallbackProviderRoute
@@ -148,10 +164,12 @@ export interface FileRoutesById {
   '/events/$eventId': typeof EventsEventIdRoute
   '/tickets/confirm': typeof TicketsConfirmRoute
   '/events/': typeof EventsIndexRoute
+  '/_authenticated/ads/confirm': typeof AuthenticatedAdsConfirmRoute
   '/_authenticated/organizer/$eventId': typeof AuthenticatedOrganizerEventIdRoute
   '/_authenticated/organizer/new': typeof AuthenticatedOrganizerNewRoute
   '/_authenticated/organizer/scan': typeof AuthenticatedOrganizerScanRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/ads/': typeof AuthenticatedAdsIndexRoute
   '/_authenticated/organizer/': typeof AuthenticatedOrganizerIndexRoute
   '/api/public/cron/social-publish': typeof ApiPublicCronSocialPublishRoute
   '/api/public/social/callback/$provider': typeof ApiPublicSocialCallbackProviderRoute
@@ -166,10 +184,12 @@ export interface FileRouteTypes {
     | '/events/$eventId'
     | '/tickets/confirm'
     | '/events/'
+    | '/ads/confirm'
     | '/organizer/$eventId'
     | '/organizer/new'
     | '/organizer/scan'
     | '/admin/'
+    | '/ads/'
     | '/organizer/'
     | '/api/public/cron/social-publish'
     | '/api/public/social/callback/$provider'
@@ -182,10 +202,12 @@ export interface FileRouteTypes {
     | '/events/$eventId'
     | '/tickets/confirm'
     | '/events'
+    | '/ads/confirm'
     | '/organizer/$eventId'
     | '/organizer/new'
     | '/organizer/scan'
     | '/admin'
+    | '/ads'
     | '/organizer'
     | '/api/public/cron/social-publish'
     | '/api/public/social/callback/$provider'
@@ -199,10 +221,12 @@ export interface FileRouteTypes {
     | '/events/$eventId'
     | '/tickets/confirm'
     | '/events/'
+    | '/_authenticated/ads/confirm'
     | '/_authenticated/organizer/$eventId'
     | '/_authenticated/organizer/new'
     | '/_authenticated/organizer/scan'
     | '/_authenticated/admin/'
+    | '/_authenticated/ads/'
     | '/_authenticated/organizer/'
     | '/api/public/cron/social-publish'
     | '/api/public/social/callback/$provider'
@@ -284,6 +308,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/ads/': {
+      id: '/_authenticated/ads/'
+      path: '/ads'
+      fullPath: '/ads/'
+      preLoaderRoute: typeof AuthenticatedAdsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/ads/confirm': {
+      id: '/_authenticated/ads/confirm'
+      path: '/ads/confirm'
+      fullPath: '/ads/confirm'
+      preLoaderRoute: typeof AuthenticatedAdsConfirmRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/organizer/': {
       id: '/_authenticated/organizer/'
       path: '/organizer'
@@ -332,20 +370,24 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedAdsConfirmRoute: typeof AuthenticatedAdsConfirmRoute
   AuthenticatedOrganizerEventIdRoute: typeof AuthenticatedOrganizerEventIdRoute
   AuthenticatedOrganizerNewRoute: typeof AuthenticatedOrganizerNewRoute
   AuthenticatedOrganizerScanRoute: typeof AuthenticatedOrganizerScanRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdsIndexRoute: typeof AuthenticatedAdsIndexRoute
   AuthenticatedOrganizerIndexRoute: typeof AuthenticatedOrganizerIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedAdsConfirmRoute: AuthenticatedAdsConfirmRoute,
   AuthenticatedOrganizerEventIdRoute: AuthenticatedOrganizerEventIdRoute,
   AuthenticatedOrganizerNewRoute: AuthenticatedOrganizerNewRoute,
   AuthenticatedOrganizerScanRoute: AuthenticatedOrganizerScanRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedAdsIndexRoute: AuthenticatedAdsIndexRoute,
   AuthenticatedOrganizerIndexRoute: AuthenticatedOrganizerIndexRoute,
 }
 
