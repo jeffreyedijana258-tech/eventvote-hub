@@ -216,7 +216,7 @@ async function publishOne(platform: Platform, post: Post, acct: any): Promise<Pl
         error?: { message: string };
       };
       if (r.error || !(r.id || r.post_id)) return { status: "failed", error: r.error?.message ?? "Facebook did not confirm the post.", at };
-      return { status: "published", id: r.post_id ?? r.id, at };
+      return { status: "published", id: (r.post_id ?? r.id)!, at };
     }
 
     if (platform === "instagram") {
