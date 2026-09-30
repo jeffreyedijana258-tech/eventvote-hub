@@ -103,6 +103,9 @@ export function SiteHeader() {
                       {isOrganizer ? "Organizer" : "Become an organizer"}
                     </Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/ads">Advertise</Link>
+                  </DropdownMenuItem>
                   {isAdmin && (
                     <DropdownMenuItem asChild>
                       <Link to="/admin">
@@ -155,6 +158,9 @@ export function SiteHeader() {
                     </Link>
                     <Link to="/organizer" onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm font-medium hover:bg-secondary">
                       {isOrganizer ? "Organizer" : "Become an organizer"}
+                    </Link>
+                    <Link to="/ads" onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm font-medium hover:bg-secondary">
+                      Advertise
                     </Link>
                     {isAdmin && (
                       <Link to="/admin" onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm font-medium hover:bg-secondary">

@@ -102,6 +102,9 @@ function OrganizerHome() {
           <p className="text-sm text-muted-foreground">Your events, sales and voting results.</p>
         </div>
         <div className="flex flex-wrap gap-2">
+          <Link to="/ads">
+            <Button variant="secondary" className="font-semibold">My advertisements</Button>
+          </Link>
           <Link to="/organizer/scan">
             <Button variant="secondary" className="font-semibold">
               <ScanLine className="mr-2 size-4" /> Votix Scanner

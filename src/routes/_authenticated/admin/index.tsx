@@ -10,6 +10,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
+import { AdminAds, AdminAdPlans, AdminAdPayments, AdminSocialPosts } from "@/components/AdminAdvertising";
 import { formatDateTime, formatNaira } from "@/lib/format";
 import {
   adminListReports,
@@ -131,7 +132,18 @@ function AdminPage() {
           <TabsTrigger value="users">Users & roles</TabsTrigger>
           <TabsTrigger value="transactions">Transactions</TabsTrigger>
           <TabsTrigger value="reports">Reports</TabsTrigger>
+          <TabsTrigger value="ads">Advertising</TabsTrigger>
+          <TabsTrigger value="social">Social publishing</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="ads" className="mt-6 space-y-8">
+          <AdminAds />
+          <AdminAdPlans />
+          <AdminAdPayments />
+        </TabsContent>
+        <TabsContent value="social" className="mt-6">
+          <AdminSocialPosts />
+        </TabsContent>
 
         <TabsContent value="events" className="mt-6 space-y-3">
           {isLoading && <Card className="p-8 text-center text-sm text-muted-foreground">Loading…</Card>}

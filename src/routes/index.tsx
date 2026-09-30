@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, BadgeCheck, CalendarCheck, Headset, Mail, Phone, Ticket, Vote } from "lucide-react";
 import heroImage from "@/assets/hero-crowd.jpg";
 import heroVideo from "@/assets/votix-hero.mp4.asset.json";
+import { SponsoredAds } from "@/components/SponsoredAds";
 import { EventCard, type EventCardData } from "@/components/EventCard";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -157,6 +158,8 @@ function Home() {
           </div>
         )}
       </section>
+
+      <SponsoredAds placement="home" />
 
       <section className="mx-auto w-full max-w-7xl px-4 py-14 sm:px-6">
         <div className="mb-6">

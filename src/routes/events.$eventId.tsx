@@ -14,6 +14,7 @@ import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
+import { SponsoredAds } from "@/components/SponsoredAds";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDateTime, formatNaira } from "@/lib/format";
 import { saleWindow, tierLabel } from "@/lib/tiers";
@@ -474,6 +475,7 @@ function EventDetail() {
           </form>
         </DialogContent>
       </Dialog>
+      <SponsoredAds placement="event" />
     </div>
   );
 }
