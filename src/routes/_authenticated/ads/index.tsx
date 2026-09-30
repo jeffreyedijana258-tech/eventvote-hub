@@ -67,6 +67,12 @@ function AdsPage() {
         },
       }),
     onSuccess: (r) => {
+      if (r.free || !r.authorizationUrl) {
+        toast.success("Advert is live — no payment needed for admins.");
+        setForm({ title: "", description: "", videoUrl: "", thumbnailUrl: "", destinationUrl: "", eventId: "" });
+        void refetch();
+        return;
+      }
       window.location.href = r.authorizationUrl;
     },
     onError: (e) => {
