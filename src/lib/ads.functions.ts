@@ -92,6 +92,31 @@ export const startAdPayment = createServerFn({ method: "POST" })
       adId = created.id;
     }
 
+    // Admins advertise for free: activate immediately, no payment.
+    const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: userId, _role: "admin" });
+    if (isAdmin) {
+      const { data: cur } = await supabaseAdmin
+        .from("advertisements")
+        .select("paid_until, starts_at")
+        .eq("id", adId!)
+        .single();
+      const now = Date.now();
+      const base = cur?.paid_until && new Date(cur.paid_until).getTime() > now ? new Date(cur.paid_until).getTime() : now;
+      const paidUntil = new Date(base + plan.duration_days * 86400000).toISOString();
+      await supabaseAdmin
+        .from("advertisements")
+        .update({
+          paid_until: paidUntil,
+          ends_at: paidUntil,
+          starts_at: cur?.starts_at ?? new Date().toISOString(),
+          status: "approved",
+          plan_id: plan.id,
+          rejection_reason: null,
+        })
+        .eq("id", adId!);
+      return { authorizationUrl: null as string | null, reference: null as string | null, free: true as const };
+    }
+
     const reference = `VTXAD-${randomCode(6)}-${randomCode(12)}`;
     const amount = Number(plan.price);
     const { error: payErr } = await supabaseAdmin.from("ad_payments").insert({
@@ -129,7 +154,7 @@ export const startAdPayment = createServerFn({ method: "POST" })
       console.error("Paystack init failed", payload.message);
       throw new Error("Could not start the payment. Please try again.");
     }
-    return { authorizationUrl: payload.data.authorization_url, reference };
+    return { authorizationUrl: payload.data.authorization_url as string | null, reference: reference as string | null, free: false as const };
   });
 
 /** Verifies an advert payment with Paystack (server-side) and activates the paid period. */
