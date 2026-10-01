@@ -10,3 +10,6 @@
 - [x] Votix QR Scanner: camera scanning, manual code entry, one-time atomic check-in, attendance log, scan history
 - [x] Guest checkout (no account)
 - [ ] Email tickets from support@votixnigeria.com — blocked: email domain setup
+
+- [x] Privacy Policy (/privacy) and Terms of Service (/terms) pages for TikTok app review
+- [ ] TikTok: waiting on TIKTOK_CLIENT_KEY / TIKTOK_CLIENT_SECRET from user
