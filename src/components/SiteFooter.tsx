@@ -30,7 +30,9 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="border-t border-border/70 px-4 py-6 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} VOTIX · Tickets. Votes. Experiences.
+        © {new Date().getFullYear()} VOTIX · Tickets. Votes. Experiences. ·{" "}
+        <Link to="/privacy" className="hover:text-primary">Privacy Policy</Link> ·{" "}
+        <Link to="/terms" className="hover:text-primary">Terms of Service</Link>
       </div>
     </footer>
   );
