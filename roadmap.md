@@ -11,5 +11,5 @@
 - [x] Guest checkout (no account)
 - [ ] Email tickets from support@votixnigeria.com — blocked: email domain setup
 
-- [ ] Privacy Policy (/privacy) and Terms of Service (/terms) pages for TikTok app review
+- [x] Privacy Policy (/privacy) and Terms of Service (/terms) pages for TikTok app review
 - [ ] TikTok: waiting on TIKTOK_CLIENT_KEY / TIKTOK_CLIENT_SECRET from user
