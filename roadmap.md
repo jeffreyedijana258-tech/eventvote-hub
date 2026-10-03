@@ -12,4 +12,5 @@
 - [ ] Email tickets from support@votixnigeria.com — blocked: email domain setup
 
 - [x] Privacy Policy (/privacy) and Terms of Service (/terms) pages for TikTok app review
+- [x] Organizer bank accounts + payout requests with admin review
 - [ ] TikTok: waiting on TIKTOK_CLIENT_KEY / TIKTOK_CLIENT_SECRET from user

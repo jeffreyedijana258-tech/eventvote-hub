@@ -377,6 +377,36 @@ export type Database = {
         }
         Relationships: []
       }
+      organizer_bank_accounts: {
+        Row: {
+          account_name: string
+          account_number: string
+          bank_code: string
+          bank_name: string
+          created_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          account_name: string
+          account_number: string
+          bank_code: string
+          bank_name: string
+          created_at?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          account_name?: string
+          account_number?: string
+          bank_code?: string
+          bank_name?: string
+          created_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       payments: {
         Row: {
           amount: number
@@ -423,6 +453,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      payout_requests: {
+        Row: {
+          account_name: string
+          account_number: string
+          admin_notes: string | null
+          amount: number
+          bank_name: string
+          created_at: string
+          id: string
+          organizer_id: string
+          processed_at: string | null
+          processed_by: string | null
+          status: Database["public"]["Enums"]["payout_status"]
+          transfer_reference: string | null
+          updated_at: string
+        }
+        Insert: {
+          account_name: string
+          account_number: string
+          admin_notes?: string | null
+          amount: number
+          bank_name: string
+          created_at?: string
+          id?: string
+          organizer_id: string
+          processed_at?: string | null
+          processed_by?: string | null
+          status?: Database["public"]["Enums"]["payout_status"]
+          transfer_reference?: string | null
+          updated_at?: string
+        }
+        Update: {
+          account_name?: string
+          account_number?: string
+          admin_notes?: string | null
+          amount?: number
+          bank_name?: string
+          created_at?: string
+          id?: string
+          organizer_id?: string
+          processed_at?: string | null
+          processed_by?: string | null
+          status?: Database["public"]["Enums"]["payout_status"]
+          transfer_reference?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -985,6 +1063,7 @@ export type Database = {
         | "completed"
         | "cancelled"
       payment_status: "pending" | "success" | "failed"
+      payout_status: "pending" | "approved" | "paid" | "rejected"
       scan_result: "valid" | "invalid" | "already_used" | "wrong_event"
       social_platform: "facebook" | "instagram" | "tiktok"
       social_post_status:
@@ -1147,6 +1226,7 @@ export const Constants = {
         "cancelled",
       ],
       payment_status: ["pending", "success", "failed"],
+      payout_status: ["pending", "approved", "paid", "rejected"],
       scan_result: ["valid", "invalid", "already_used", "wrong_event"],
       social_platform: ["facebook", "instagram", "tiktok"],
       social_post_status: [
