@@ -11,6 +11,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDate, formatNaira } from "@/lib/format";
 import { becomeOrganizer } from "@/lib/roles.functions";
+import { OrganizerPayouts } from "@/components/OrganizerPayouts";
 
 export const Route = createFileRoute("/_authenticated/organizer/")({
   component: OrganizerHome,
@@ -139,6 +140,8 @@ function OrganizerHome() {
           <span className="font-semibold">{voteCount ?? 0}</span> total votes across your events
         </p>
       </Card>
+
+      <OrganizerPayouts />
 
       <h2 className="mb-4 font-display text-xl font-bold">My events</h2>
       <div className="space-y-3">

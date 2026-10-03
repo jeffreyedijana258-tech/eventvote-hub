@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
 import { AdminAds, AdminAdPlans, AdminAdPayments, AdminSocialPosts } from "@/components/AdminAdvertising";
+import { AdminPayouts } from "@/components/AdminPayouts";
 import { formatDateTime, formatNaira } from "@/lib/format";
 import {
   adminListReports,
@@ -134,7 +135,12 @@ function AdminPage() {
           <TabsTrigger value="reports">Reports</TabsTrigger>
           <TabsTrigger value="ads">Advertising</TabsTrigger>
           <TabsTrigger value="social">Social publishing</TabsTrigger>
+          <TabsTrigger value="payouts">Payouts</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="payouts" className="mt-6">
+          <AdminPayouts />
+        </TabsContent>
 
         <TabsContent value="ads" className="mt-6 space-y-8">
           <AdminAds />
